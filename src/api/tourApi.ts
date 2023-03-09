@@ -38,6 +38,11 @@ const tourApi = {
     return axiosClient.get(url);
   },
 
+  getByPlaceId(params: any) {
+    const url = `/Tour/getToutByPlaceId`;
+    return axiosClient.get(url, { params });
+  },
+
   create(data: TourData) {
     const url = "/Tour";
     return axiosClient.post(url, data);
