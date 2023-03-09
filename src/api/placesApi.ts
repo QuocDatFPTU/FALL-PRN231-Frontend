@@ -1,5 +1,14 @@
 import axiosClient from "./axiosClient";
 
+export type placesType = {
+  placeId: Number;
+  placeName: String;
+  placeDescription: String;
+  location: String;
+  placeImageUrl: String;
+  tours?: any;
+};
+
 type placesData = {
   placeId: number;
   placeName: String;

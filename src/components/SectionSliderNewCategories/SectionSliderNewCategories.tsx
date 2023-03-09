@@ -1,12 +1,12 @@
-import React, { FC, useEffect, useMemo } from "react";
-import Heading from "components/Heading/Heading";
 import Glide from "@glidejs/glide";
-import { TaxonomyType } from "data/types";
 import CardCategory3 from "components/CardCategory3/CardCategory3";
 import CardCategory4 from "components/CardCategory4/CardCategory4";
-import NextPrev from "shared/NextPrev/NextPrev";
 import CardCategory5 from "components/CardCategory5/CardCategory5";
+import Heading from "components/Heading/Heading";
+import { TaxonomyType } from "data/types";
 import useNcId from "hooks/useNcId";
+import { FC, useEffect, useMemo } from "react";
+import NextPrev from "shared/NextPrev/NextPrev";
 
 export interface SectionSliderNewCategoriesProps {
   className?: string;
@@ -78,11 +78,11 @@ const DEMO_CATS: TaxonomyType[] = [
 ];
 
 const SectionSliderNewCategories: FC<SectionSliderNewCategoriesProps> = ({
-  heading = "Heading of sections",
+  heading = "Destinations",
   subHeading = "Descriptions for sections",
   className = "",
   itemClassName = "",
-  categories = DEMO_CATS,
+  categories,
   itemPerRow = 5,
   categoryCardType = "card3",
   sliderStyle = "style1",
@@ -90,6 +90,7 @@ const SectionSliderNewCategories: FC<SectionSliderNewCategoriesProps> = ({
 }) => {
   const UNIQUE_CLASS =
     "SectionSliderNewCategories__" + uniqueClassName + useNcId();
+  console.log("catergories", categories);
 
   let MY_GLIDEJS = useMemo(() => {
     return new Glide(`.${UNIQUE_CLASS}`, {
@@ -143,7 +144,7 @@ const SectionSliderNewCategories: FC<SectionSliderNewCategoriesProps> = ({
     <div className={`nc-SectionSliderNewCategories ${className}`}>
       <div className={`${UNIQUE_CLASS} flow-root`}>
         <Heading
-          desc={subHeading}
+          // desc={subHeading}
           hasNextPrev={sliderStyle === "style1"}
           isCenter={sliderStyle === "style2"}
         >
@@ -151,11 +152,13 @@ const SectionSliderNewCategories: FC<SectionSliderNewCategoriesProps> = ({
         </Heading>
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
-            {categories.map((item, index) => (
-              <li key={index} className={`glide__slide ${itemClassName}`}>
-                {renderCard(item, index)}
-              </li>
-            ))}
+            {categories &&
+              categories.length !== 0 &&
+              categories.map((item, index) => (
+                <li key={index} className={`glide__slide ${itemClassName}`}>
+                  {renderCard(item, index)}
+                </li>
+              ))}
           </ul>
         </div>
 

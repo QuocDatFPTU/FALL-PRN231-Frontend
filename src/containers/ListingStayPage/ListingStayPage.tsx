@@ -1,18 +1,31 @@
+import { CheckBadgeIcon } from "@heroicons/react/24/solid";
+import placeApi, { placesType } from "api/placesApi";
 import BackgroundSection from "components/BackgroundSection/BackgroundSection";
 import BgGlassmorphism from "components/BgGlassmorphism/BgGlassmorphism";
 import SectionGridAuthorBox from "components/SectionGridAuthorBox/SectionGridAuthorBox";
 import SectionHeroArchivePage from "components/SectionHeroArchivePage/SectionHeroArchivePage";
 import SectionSliderNewCategories from "components/SectionSliderNewCategories/SectionSliderNewCategories";
 import SectionSubscribe2 from "components/SectionSubscribe2/SectionSubscribe2";
-import React, { FC } from "react";
-import SectionGridFilterCard from "./SectionGridFilterCard";
+import { FC, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+import { useParams } from "react-router-dom";
+import SectionGridFilterCard from "./SectionGridFilterCard";
 
 export interface ListingStayPageProps {
   className?: string;
 }
 
 const ListingStayPage: FC<ListingStayPageProps> = ({ className = "" }) => {
+  const { id } = useParams();
+  const [place, setPlace] = useState<placesType>();
+
+  useEffect(() => {
+    (async () => {
+      const res = await placeApi.getById(Number(id));
+      setPlace(res.data);
+    })();
+  }, []);
+
   return (
     <div
       className={`nc-ListingStayPage relative overflow-hidden ${className}`}
