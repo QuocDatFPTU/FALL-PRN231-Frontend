@@ -3,7 +3,7 @@ import imagePng from "images/hero-right2.png";
 import HeroSearchForm, {
   SearchTab,
 } from "components/HeroSearchForm/HeroSearchForm";
-import { placesType } from 'api/placesApi';
+import { placesType } from "api/placesApi";
 
 export interface SectionHeroArchivePageProps {
   className?: string;
@@ -14,16 +14,16 @@ export interface SectionHeroArchivePageProps {
   data?: placesType;
 }
 
-
 const SectionHeroArchivePage: FC<SectionHeroArchivePageProps> = ({
   className = "",
-  data={
-    "placeId": 1,
-    "placeName": "Ha Long Bay",
-    "placeDescription": "A natural wonder of Vietnam",
-    "location": "Quang Ninh",
-    "placeImageUrl": "https://www.visithalongbay.com/media/cache/1a/f5/1af56f83eb2ba43b31351ae2e0cb1b7b.jpg",
-    "tours": []
+  data = {
+    placeId: 1,
+    placeName: "Ha Long Bay",
+    placeDescription: "A natural wonder of Vietnam",
+    location: "Quang Ninh",
+    placeImageUrl:
+      "https://www.visithalongbay.com/media/cache/1a/f5/1af56f83eb2ba43b31351ae2e0cb1b7b.jpg",
+    tours: [],
   },
   listingType,
   currentPage,
@@ -49,13 +49,17 @@ const SectionHeroArchivePage: FC<SectionHeroArchivePageProps> = ({
             ) : (
               <>
                 <i className="text-2xl las la-home"></i>
-                <span className="ml-2.5">112 properties</span>
+                <span className="ml-2.5">{data?.tours.length} tours</span>
               </>
             )}
           </div>
         </div>
         <div className="flex-grow">
-          <img className="w-full" src={data.placeImageUrl.toString()} alt="hero" />
+          <img
+            className="w-full"
+            src={data.placeImageUrl.toString()}
+            alt="hero"
+          />
         </div>
       </div>
 

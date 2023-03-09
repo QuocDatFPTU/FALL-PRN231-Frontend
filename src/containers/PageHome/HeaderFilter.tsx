@@ -6,27 +6,34 @@ import ButtonSecondary from "shared/Button/ButtonSecondary";
 import { ReactNode } from "react";
 
 export interface HeaderFilterProps {
-  tabActive: string;
-  tabs: string[];
+  // tabActive: Number;
+  tabs?: {
+    id: any;
+    name: any;
+  }[];
   heading: ReactNode;
   subHeading?: ReactNode;
-  onClickTab: (item: string) => void;
+  onClickTab: (item: Number) => void;
+  tabActiveState: any;
+  setTabActiveState: any;
 }
 
 const HeaderFilter: FC<HeaderFilterProps> = ({
-  tabActive,
+  // tabActive,
+  tabActiveState,
+  setTabActiveState,
   tabs,
   subHeading = "",
   heading = "🎈 Latest Articles",
   onClickTab,
 }) => {
-  const [tabActiveState, setTabActiveState] = useState(tabActive);
+  // const [tabActiveState, setTabActiveState] = useState(tabActive);
 
-  useEffect(() => {
-    setTabActiveState(tabActive);
-  }, [tabActive]);
+  // useEffect(() => {
+  //   setTabActiveState(tabActiveState);
+  // }, [tabActiveState]);
 
-  const handleClickTab = (item: string) => {
+  const handleClickTab = (item: Number) => {
     onClickTab && onClickTab(item);
     setTabActiveState(item);
   };
@@ -39,13 +46,13 @@ const HeaderFilter: FC<HeaderFilterProps> = ({
           className="sm:space-x-2"
           containerClassName="relative flex w-full overflow-x-auto text-sm md:text-base hiddenScrollbar"
         >
-          {tabs.map((item, index) => (
+          {tabs!.map((item, index) => (
             <NavItem
               key={index}
-              isActive={tabActiveState === item}
-              onClick={() => handleClickTab(item)}
+              isActive={tabActiveState === item.id}
+              onClick={() => handleClickTab(item.id)}
             >
-              {item}
+              {item.name}
             </NavItem>
           ))}
         </Nav>

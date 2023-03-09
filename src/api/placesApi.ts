@@ -9,7 +9,7 @@ export type placesType = {
   tours?: any;
 };
 
-type placesData = {
+export type placesData = {
   placeId: number;
   placeName: String;
   placeDescription: String;

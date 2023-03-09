@@ -1,6 +1,18 @@
 import axiosClient from "./axiosClient";
 
-type TourData = {
+export type tourType = {
+  tourId: Number;
+  tourName: String;
+  tourDescription: String;
+  placeId: Number;
+  duration: Number;
+  cost: Number;
+  available: Number;
+  place?: any;
+  bookings?: any;
+};
+
+export type TourData = {
   tourId: Number;
   tourName: String;
   tourDescription: String;
@@ -10,14 +22,19 @@ type TourData = {
   available: Number;
 };
 
-const customerApi = {
+const tourApi = {
   getAll(params?: any) {
     const url = "/Tour";
     return axiosClient.get(url, { params });
   },
 
-  getByName(name: String) {
+  getByName(name: string) {
     const url = `/Tour/${name}`;
+    return axiosClient.get(url);
+  },
+
+  getById(id: Number) {
+    const url = `/Tour/${id}`;
     return axiosClient.get(url);
   },
 
@@ -37,4 +54,4 @@ const customerApi = {
   },
 };
 
-export default customerApi;
+export default tourApi;

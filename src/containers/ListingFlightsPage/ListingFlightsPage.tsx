@@ -73,7 +73,7 @@ const ListingFlightsPage: FC<ListingFlightsPageProps> = ({
       data-nc-id="ListingFlightsPage"
     >
       <Helmet>
-        <title>Chisfis || Booking React Template</title>
+        <title>Chisfis || Tour Booking</title>
       </Helmet>
       <BgGlassmorphism />
 

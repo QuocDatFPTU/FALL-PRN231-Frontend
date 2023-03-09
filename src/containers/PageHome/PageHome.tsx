@@ -135,8 +135,6 @@ function PageHome() {
           thumbnail: e.placeImageUrl,
         };
       });
-      console.log("🚀 ~ file: PageHome.tsx:138 ~ list ~ list:", list);
-
       setPlaces(list);
     })();
   }, []);
@@ -161,7 +159,18 @@ function PageHome() {
         {/* SECTION */}
         <div className="relative py-16">
           <BackgroundSection />
-          <SectionGridFeaturePlaces />
+          {places.length !== 0 && (
+            <SectionGridFeaturePlaces
+              tabs={places
+                .sort(function (a, b) {
+                  return Math.random() - 0.5;
+                })
+                .map((e): any => {
+                  return { id: e.id, name: e.name };
+                })
+                .slice(0, 4)}
+            />
+          )}
         </div>
         {/* SECTION */}
         <SectionHowItWork />

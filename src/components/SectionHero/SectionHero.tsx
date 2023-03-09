@@ -18,10 +18,23 @@ const SectionHero: FC<SectionHeroProps> = ({ className = "" }) => {
           <h2 className="font-medium text-4xl md:text-5xl xl:text-7xl !leading-[114%] ">
             Booking Tours
           </h2>
-          <span className="text-base md:text-lg text-neutral-500 dark:text-neutral-400">
-            Accompanying us, you have a trip full of experiences. With Chisfis,
-            booking accommodation, resort villas, hotels
-          </span>
+          <div>
+            <p className="text-base md:text-lg text-neutral-500 dark:text-neutral-400">
+              Accompanying us, you have a trip full of experiences. With
+              Chisfis, booking accommodation, resort villas, hotels.
+            </p>
+            <div className="opacity-0">
+              dkal;sdka;sldkasl;dkals;dk;lasdk;alsdkasl;dksal;dk;laskdas;ldsakl;das
+            </div>
+            <p className="text-base md:text-lg text-neutral-500 dark:text-neutral-400">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente
+              in autem ipsam accusamus porro, libero repellat iure dolorum aut
+              tenetur magnam? Vero ab sit repellat nostrum itaque unde non hic.
+            </p>
+            <div className="opacity-0">
+              dkal;sdka;sldkasl;dkals;dk;lasdk;alsdkasl;dksal;dk;laskdas;ldsakl;das
+            </div>
+          </div>
           <ButtonPrimary>Start your search</ButtonPrimary>
         </div>
         <div className="flex-grow">
@@ -29,9 +42,9 @@ const SectionHero: FC<SectionHeroProps> = ({ className = "" }) => {
         </div>
       </div>
 
-      <div className="hidden lg:block z-10 mb-12 lg:mb-0 lg:-mt-40 w-full">
+      {/* <div className="hidden lg:block z-10 mb-12 lg:mb-0 lg:-mt-40 w-full">
         <HeroSearchForm />
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -64,7 +64,7 @@ const demoChildMenus: NavItemType[] = [
   {
     id: ncNanoId(),
     href: "/",
-    name: "Online Booking",
+    name: "Tour Booking",
   },
   {
     id: ncNanoId(),
@@ -190,16 +190,16 @@ export const NAVIGATION_DEMO: NavItemType[] = [
     id: ncNanoId(),
     href: "/",
     name: "Home",
-    type: "dropdown",
-    children: demoChildMenus,
+    // type: "none",
+    // children: demoChildMenus,
     isNew: true,
   },
   {
     id: ncNanoId(),
     href: "/unique_id_",
-    name: "Five columns",
-    type: "megaMenu",
-    megaMenu: megaMenuDemo,
+    name: "Tours",
+    // type: "megaMenu",
+    // megaMenu: megaMenuDemo,
   },
   {
     id: ncNanoId(),
