@@ -9,7 +9,7 @@ export interface Heading2Props {
 
 const Heading2: React.FC<Heading2Props> = ({
   className = "",
-  heading = "Stays in Tokyo",
+  heading = "Tour List",
   subHeading,
 }) => {
   return (
