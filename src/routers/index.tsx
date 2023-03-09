@@ -46,6 +46,7 @@ import ListingFlightsPage from "containers/ListingFlightsPage/ListingFlightsPage
 import FooterNav from "components/FooterNav";
 import useWindowSize from "hooks/useWindowResize";
 import PageHome3 from "containers/PageHome/PageHome3";
+import ListingTourPage from "containers/ListingStayPage/ListingTourPage";
 
 export const pages: Page[] = [
   { path: "/", exact: true, component: PageHome },
@@ -57,6 +58,8 @@ export const pages: Page[] = [
   { path: "/listing-stay/:id", component: ListingStayPage },
   { path: "/listing-stay-map", component: ListingStayMapPage },
   { path: "/listing-stay-detail", component: ListingStayDetailPage },
+  //
+  { path: "/listing-tour", component: ListingTourPage, },
   //
   {
     path: "/listing-experiences",

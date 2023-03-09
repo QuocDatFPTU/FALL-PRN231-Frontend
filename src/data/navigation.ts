@@ -196,7 +196,7 @@ export const NAVIGATION_DEMO: NavItemType[] = [
   },
   {
     id: ncNanoId(),
-    href: "/unique_id_",
+    href: "/listing-tour",
     name: "Tours",
     // type: "megaMenu",
     // megaMenu: megaMenuDemo,

@@ -4,6 +4,7 @@ export type tourType = {
   tourId: Number;
   tourName: String;
   tourDescription: String;
+  placeImageUrls: string;
   placeId: Number;
   duration: Number;
   cost: Number;
