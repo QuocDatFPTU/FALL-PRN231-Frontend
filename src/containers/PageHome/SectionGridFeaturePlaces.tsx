@@ -43,7 +43,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
         data
           .map((e: tourType) => {
             return {
-              id: e.placeId,
+              id: e.id,
               authorId: 10,
               date: "May 20, 2021",
               href: "/listing-stay-detail",
@@ -63,7 +63,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
               address: "1 Anzinger Court",
               reviewStart: 4.8,
               reviewCount: 28,
-              price: e.cost.toString(),
+              //price: e.cost.toString(),
               maxGuests: 6,
               bedrooms: 10,
               bathrooms: 3,

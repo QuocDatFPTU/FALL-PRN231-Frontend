@@ -10,6 +10,8 @@ import { FC, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import SectionGridFilterCard from "./SectionGridFilterCard";
+import destinationApi from './../../api/destinationApi';
+import { destinationsType } from 'api/destinationApi';
 
 export interface ListingStayPageProps {
   className?: string;
@@ -17,12 +19,12 @@ export interface ListingStayPageProps {
 
 const ListingStayPage: FC<ListingStayPageProps> = ({ className = "" }) => {
   const { id } = useParams();
-  const [place, setPlace] = useState<placesType>();
+  const [destination, setDetination] = useState<destinationsType>();
 
   useEffect(() => {
     (async () => {
-      const res = await placeApi.getById(Number(id));
-      setPlace(res.data);
+      const res = await destinationApi.getById(Number(id));
+      setDetination(res.data.data);
     })();
   }, []);
 
@@ -39,7 +41,7 @@ const ListingStayPage: FC<ListingStayPageProps> = ({ className = "" }) => {
       <div className="container relative overflow-hidden">
         {/* SECTION HERO */}
         <SectionHeroArchivePage
-          data={place!}
+          data={destination!}
           currentPage="Stays"
           currentTab="Stays"
           className="pt-10 pb-24 lg:pb-28 lg:pt-16 "

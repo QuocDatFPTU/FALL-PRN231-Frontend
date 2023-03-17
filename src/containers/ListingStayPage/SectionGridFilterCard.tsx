@@ -8,6 +8,9 @@ import Heading2 from "components/Heading/Heading2";
 import tourApi, { tourType } from "api/tourApi";
 import { DEMO_STAY_CATEGORIES } from "data/taxonomies";
 import { DEMO_AUTHORS } from "data/authors";
+import destinationApi, { destinationsType } from './../../api/destinationApi';
+import { tourDetailType } from "api/tourDetailsApi";
+import tourDetaisApi from './../../api/tourDetailsApi';
 
 export interface SectionGridFilterCardProps {
   className?: string;
@@ -20,36 +23,43 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
 }) => {
 
   const [tour, setTour] = useState<tourType[]>();
+  const [destination, setDestination] = useState<destinationsType[]>();
+  const [tourDetail, setTourDetail] = useState<tourDetailType[]>();
   const [card, setCard] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const {data} = await tourApi.getAll();
+      const {data} = await (await tourDetaisApi.getAll()).data;
+      const {data: desti} = await (await destinationApi.getAll()).data;
+      const {data: tode} = await (await tourApi.getAll()).data;
       setTour(data);
+      //console.log("tour", data);
+      setDestination(desti);
+      setTourDetail(tode);
       setCard(
         data
-          .map((e: tourType) => {
+          .map((e: tourType, d: destinationsType, to: tourDetailType ) => {
             return {
-              id: e.tourId,
+              id: e.id,
               authorId: 10,
               date: "May 20, 2021",
               href: "/listing-tour-detail",
               listingCategoryId: 17,
               title: e.tourName,
               featuredImage:
-                e.placeImageUrls,
-              galleryImgs: [
-                e.placeImageUrls
-              ],
+                d.destinationImages[0].image,
+              // galleryImgs: [
+              //   e.placeImageUrls
+              // ],
               commentCount: 70,
               viewCount: 602,
               like: false,
               address: "1 Anzinger Court",
               reviewStart: 4.8,
               reviewCount: 28,
-              price: e.cost.toString(),
+              //price: e.cost.toString(),
               maxGuests: 6,
-              bedrooms: e.available,
+              // bedrooms: e.available,
               bathrooms: 3,
               saleOff: "-10% today",
               isAds: null,

@@ -1,35 +1,29 @@
-import React, { FC, ReactNode } from "react";
-import imagePng from "images/hero-right2.png";
+import React, { FC, ReactNode } from 'react'
+import imagePng from 'images/hero-right2.png'
 import HeroSearchForm, {
   SearchTab,
-} from "components/HeroSearchForm/HeroSearchForm";
-import { placesType } from "api/placesApi";
+} from 'components/HeroSearchForm/HeroSearchForm'
+import { destinationsType } from 'api/destinationApi'
 
 export interface SectionHeroArchivePageProps {
-  className?: string;
-  listingType?: ReactNode;
-  currentPage: "Stays" | "Experiences" | "Cars" | "Flights";
-  currentTab: SearchTab;
-  rightImage?: string;
-  data?: placesType;
+  className?: string
+  listingType?: ReactNode
+  currentPage: 'Stays' | 'Experiences' | 'Cars' | 'Flights'
+  currentTab: SearchTab
+  rightImage?: string
+  data?: destinationsType
 }
 
 const SectionHeroArchivePage: FC<SectionHeroArchivePageProps> = ({
-  className = "",
-  data = {
-    placeId: 1,
-    placeName: "Ha Long Bay",
-    placeDescription: "A natural wonder of Vietnam",
-    location: "Quang Ninh",
-    placeImageUrl:
-      "https://www.visithalongbay.com/media/cache/1a/f5/1af56f83eb2ba43b31351ae2e0cb1b7b.jpg",
-    tours: [],
-  },
+  className = '',
+  data,
   listingType,
   currentPage,
   currentTab,
   rightImage = imagePng,
 }) => {
+  console.log(data);
+  
   return (
     <div
       className={`nc-SectionHeroArchivePage flex flex-col relative ${className}`}
@@ -38,28 +32,30 @@ const SectionHeroArchivePage: FC<SectionHeroArchivePageProps> = ({
       <div className="flex flex-col lg:flex-row lg:items-center">
         <div className="flex-shrink-0 lg:w-1/2 flex flex-col items-start space-y-6 lg:space-y-10 pb-14 lg:pb-64 xl:pb-80 xl:pr-14 lg:mr-10 xl:mr-0">
           <h2 className="font-medium text-4xl md:text-5xl xl:text-7xl leading-[110%]">
-            {data.placeName}, {data.location}
+            {data?.name}, {data?.region}
           </h2>
           <div className="flex items-center text-base md:text-lg text-neutral-500 dark:text-neutral-400">
             <i className="text-2xl las la-map-marked"></i>
-            <span className="ml-2.5">{data.location} </span>
+            <span className="ml-2.5">{data?.region} </span>
             <span className="mx-5"></span>
             {listingType ? (
               listingType
             ) : (
               <>
                 <i className="text-2xl las la-home"></i>
-                <span className="ml-2.5">{data?.tours.length} tours</span>
+                <span className="ml-2.5"> tours</span>
               </>
             )}
           </div>
         </div>
         <div className="flex-grow">
-          <img
-            className="w-full"
-            src={data.placeImageUrl.toString()}
-            alt="hero"
-          />
+          {data && (
+            <img
+              className="w-full"
+              src={data!.destinationImages[0].image.toString()}
+              alt="hero"
+            />
+          )}
         </div>
       </div>
 
@@ -69,7 +65,7 @@ const SectionHeroArchivePage: FC<SectionHeroArchivePageProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SectionHeroArchivePage;
+export default SectionHeroArchivePage

@@ -13,7 +13,7 @@ import SectionGridCategoryBox from "components/SectionGridCategoryBox/SectionGri
 import SectionBecomeAnAuthor from "components/SectionBecomeAnAuthor/SectionBecomeAnAuthor";
 import SectionVideos from "./SectionVideos";
 import SectionClientSay from "components/SectionClientSay/SectionClientSay";
-import placeApi, { placesType } from "api/placesApi";
+import destinationApi, { destinationsType } from './../../api/destinationApi';
 
 const DEMO_CATS: TaxonomyType[] = [
   {
@@ -121,21 +121,24 @@ const DEMO_CATS_2: TaxonomyType[] = [
 ];
 
 function PageHome() {
-  const [places, setPlaces] = useState<TaxonomyType[]>([]);
+  const [destination, setDestinations] = useState<TaxonomyType[]>([]);
   useEffect(() => {
     (async () => {
-      const { data } = await placeApi.getAll();
-      const list = data.map((e: placesType) => {
+      const { data } = await destinationApi.getAll();
+      console.log("data", data);
+      
+      const list = data.data.filter((x: destinationsType) => x.status != 0 ).map((e: destinationsType) => {
         return {
-          id: e.placeId,
-          href: `/listing-stay/${e.placeId}`,
-          name: e.placeName,
+          id: e.id,
+          href: `/listing-stay/${e.id}`,
+          name: e.name,
           taxonomy: "category",
           count: 188288,
-          thumbnail: e.placeImageUrl,
+          thumbnail: e.destinationImages[0].image,
         };
       });
-      setPlaces(list);
+      setDestinations(list);
+      //console.log("list",data);   
     })();
   }, []);
 
@@ -148,9 +151,9 @@ function PageHome() {
         {/* SECTION HERO */}
         <SectionHero className="pt-10 lg:pt-16 lg:pb-16" />
         {/* SECTION 1 */}
-        {places?.length !== 0 && (
+        {destination?.length !== 0 && (
           <SectionSliderNewCategories
-            categories={places}
+            categories={destination}
             uniqueClassName="PageHome_s1"
           />
         )}
@@ -159,9 +162,9 @@ function PageHome() {
         {/* SECTION */}
         <div className="relative py-16">
           <BackgroundSection />
-          {places.length !== 0 && (
+          {destination.length !== 0 && (
             <SectionGridFeaturePlaces
-              tabs={places
+              tabs={destination
                 .sort(function (a, b) {
                   return Math.random() - 0.5;
                 })
@@ -177,9 +180,9 @@ function PageHome() {
         {/* SECTION 1 */}
         <div className="relative py-16">
           <BackgroundSection className="bg-orange-50 dark:bg-black dark:bg-opacity-20 " />
-          {places?.length !== 0 && (
+          {destination?.length !== 0 && (
             <SectionSliderNewCategories
-              categories={places}
+              categories={destination}
               categoryCardType="card4"
               itemPerRow={4}
               heading="Suggestions for discovery"
@@ -204,9 +207,9 @@ function PageHome() {
           <SectionBecomeAnAuthor />
         </div>
         {/* SECTION 1 */}
-        {places?.length !== 0 && (
+        {destination?.length !== 0 && (
           <SectionSliderNewCategories
-            categories={places}
+            categories={destination}
             heading="Explore by types of stays"
             subHeading="Explore houses based on 10 types of stays"
             categoryCardType="card5"
