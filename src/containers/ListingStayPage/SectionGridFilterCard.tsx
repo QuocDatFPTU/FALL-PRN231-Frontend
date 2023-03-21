@@ -1,16 +1,15 @@
-import React, { FC, useEffect, useState } from "react";
-import StayCard from "components/StayCard/StayCard";
-import { DEMO_STAY_LISTINGS } from "data/listings";
-import { StayDataType } from "data/types";
-import Pagination from "shared/Pagination/Pagination";
-import TabFilters from "./TabFilters";
-import Heading2 from "components/Heading/Heading2";
 import tourApi, { tourType } from "api/tourApi";
-import { DEMO_STAY_CATEGORIES } from "data/taxonomies";
+import Heading2 from "components/Heading/Heading2";
+import StayCard from "components/StayCard/StayCard";
 import { DEMO_AUTHORS } from "data/authors";
-import destinationApi, { destinationsType } from './../../api/destinationApi';
-import { tourDetailType } from "api/tourDetailsApi";
-import tourDetaisApi from './../../api/tourDetailsApi';
+import { DEMO_STAY_LISTINGS } from "data/listings";
+import { DEMO_STAY_CATEGORIES } from "data/taxonomies";
+import { StayDataType } from "data/types";
+import { FC, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Pagination from "shared/Pagination/Pagination";
+import destinationApi from "./../../api/destinationApi";
+import TabFilters from "./TabFilters";
 
 export interface SectionGridFilterCardProps {
   className?: string;
@@ -21,44 +20,40 @@ const DEMO_DATA: StayDataType[] = DEMO_STAY_LISTINGS.filter((_, i) => i < 8);
 const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
   className = "",
 }) => {
+  const { id } = useParams();
 
-  const [tour, setTour] = useState<tourType[]>();
-  const [destination, setDestination] = useState<destinationsType[]>();
-  const [tourDetail, setTourDetail] = useState<tourDetailType[]>();
   const [card, setCard] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const {data} = await (await tourDetaisApi.getAll()).data;
-      const {data: desti} = await (await destinationApi.getAll()).data;
-      const {data: tode} = await (await tourApi.getAll()).data;
-      setTour(data);
-      //console.log("tour", data);
-      setDestination(desti);
-      setTourDetail(tode);
+      const destination = await (
+        await destinationApi.getById(Number(id))
+      ).data.data;
+      const tour = await (
+        await tourApi.getAll({ destinationId: id })
+      ).data.data;
+
       setCard(
-        data
-          .map((e: tourType, d: destinationsType, to: tourDetailType ) => {
+        tour
+          .map((e: tourType) => {
             return {
               id: e.id,
               authorId: 10,
               date: "May 20, 2021",
-              href: "/listing-tour-detail",
+              href: `/listing-tour-detail/${e.id}`,
               listingCategoryId: 17,
               title: e.tourName,
-              featuredImage:
-                d.destinationImages[0].image,
-              // galleryImgs: [
-              //   e.placeImageUrls
-              // ],
+              galleryImgs: destination.destinationImages.map(
+                (b: any) => b.image
+              ),
               commentCount: 70,
               viewCount: 602,
               like: false,
-              address: "1 Anzinger Court",
+              address: destination.name,
               reviewStart: 4.8,
               reviewCount: 28,
               //price: e.cost.toString(),
-              maxGuests: 6,
+              maxGuests: e.tourCapacity,
               // bedrooms: e.available,
               bathrooms: 3,
               saleOff: "-10% today",

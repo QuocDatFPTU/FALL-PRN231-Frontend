@@ -13,7 +13,7 @@ import SectionGridCategoryBox from "components/SectionGridCategoryBox/SectionGri
 import SectionBecomeAnAuthor from "components/SectionBecomeAnAuthor/SectionBecomeAnAuthor";
 import SectionVideos from "./SectionVideos";
 import SectionClientSay from "components/SectionClientSay/SectionClientSay";
-import destinationApi, { destinationsType } from './../../api/destinationApi';
+import destinationApi, { destinationsType } from "./../../api/destinationApi";
 
 const DEMO_CATS: TaxonomyType[] = [
   {
@@ -125,20 +125,20 @@ function PageHome() {
   useEffect(() => {
     (async () => {
       const { data } = await destinationApi.getAll();
-      console.log("data", data);
-      
-      const list = data.data.filter((x: destinationsType) => x.status != 0 ).map((e: destinationsType) => {
-        return {
-          id: e.id,
-          href: `/listing-stay/${e.id}`,
-          name: e.name,
-          taxonomy: "category",
-          count: 188288,
-          thumbnail: e.destinationImages[0].image,
-        };
-      });
+      const list = data.data
+        .filter((x: destinationsType) => x.status != 0)
+        .map((e: destinationsType) => {
+          return {
+            id: e.id,
+            href: `/listing-stay/${e.id}`,
+            name: e.name,
+            taxonomy: "category",
+            count: 188288,
+            thumbnail: e.destinationImages[0].image,
+          };
+        });
       setDestinations(list);
-      //console.log("list",data);   
+      //console.log("list",data);
     })();
   }, []);
 

@@ -1,29 +1,27 @@
-import React, { FC, ReactNode } from 'react'
-import imagePng from 'images/hero-right2.png'
+import React, { FC, ReactNode } from "react";
+import imagePng from "images/hero-right2.png";
 import HeroSearchForm, {
   SearchTab,
-} from 'components/HeroSearchForm/HeroSearchForm'
-import { destinationsType } from 'api/destinationApi'
+} from "components/HeroSearchForm/HeroSearchForm";
+import { destinationsType } from "api/destinationApi";
 
 export interface SectionHeroArchivePageProps {
-  className?: string
-  listingType?: ReactNode
-  currentPage: 'Stays' | 'Experiences' | 'Cars' | 'Flights'
-  currentTab: SearchTab
-  rightImage?: string
-  data?: destinationsType
+  className?: string;
+  listingType?: ReactNode;
+  currentPage: "Stays" | "Experiences" | "Cars" | "Flights";
+  currentTab: SearchTab;
+  rightImage?: string;
+  data?: destinationsType;
 }
 
 const SectionHeroArchivePage: FC<SectionHeroArchivePageProps> = ({
-  className = '',
+  className = "",
   data,
   listingType,
   currentPage,
   currentTab,
   rightImage = imagePng,
 }) => {
-  console.log(data);
-  
   return (
     <div
       className={`nc-SectionHeroArchivePage flex flex-col relative ${className}`}
@@ -65,7 +63,7 @@ const SectionHeroArchivePage: FC<SectionHeroArchivePageProps> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SectionHeroArchivePage
+export default SectionHeroArchivePage;

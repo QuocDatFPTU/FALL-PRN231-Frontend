@@ -1,3 +1,4 @@
+import { tourDetailType } from "api/tourDetailsApi";
 import axiosClient from "./axiosClient";
 
 export type tourType = {
@@ -7,6 +8,9 @@ export type tourType = {
   tourCapacity: Number;
   status: Number;
   tourGuideId: Number;
+  tourGuides: any;
+  tourPrices: any;
+  tourDetails: tourDetailType[];
 };
 
 // export type TourData = {
