@@ -12,6 +12,7 @@ import "./fonts/line-awesome-1.3.0/css/line-awesome.css";
 //
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { AuthProvider } from "provider/AuthProvider";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -19,7 +20,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   // <React.StrictMode>
-  <App />
+  <AuthProvider>
+    <App />
+  </AuthProvider>
   // </React.StrictMode>
 );
 

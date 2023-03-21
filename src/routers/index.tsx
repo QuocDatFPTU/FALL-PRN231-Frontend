@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useContext } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Page } from "./types";
 import ScrollToTop from "./ScrollToTop";
 import Footer from "shared/Footer/Footer";
@@ -47,6 +47,7 @@ import FooterNav from "components/FooterNav";
 import useWindowSize from "hooks/useWindowResize";
 import PageHome3 from "containers/PageHome/PageHome3";
 import ListingTourPage from "containers/ListingStayPage/ListingTourPage";
+import { AuthContext } from "context/AuthContext";
 
 export const pages: Page[] = [
   { path: "/", exact: true, component: PageHome },
@@ -59,7 +60,7 @@ export const pages: Page[] = [
   { path: "/listing-stay-map", component: ListingStayMapPage },
   { path: "/listing-stay-detail", component: ListingStayDetailPage },
   //
-  { path: "/listing-tour", component: ListingTourPage, },
+  { path: "/listing-tour", component: ListingTourPage },
   //
   {
     path: "/listing-experiences",
@@ -114,21 +115,46 @@ export const pages: Page[] = [
   //
 ];
 
+// const ProtectedRoute = ({ children }: any) => {
+//   const user = useContext(AuthContext);
+
+//   if (!user) {
+//     return <Navigate to="/login" replace />;
+//   }
+
+//   return children;
+// };
+
 const MyRoutes = () => {
   const WIN_WIDTH = useWindowSize().width || window.innerWidth;
   return (
     <BrowserRouter>
       <ScrollToTop />
       <SiteHeader />
-
       <Routes>
+        {/* <Route index element={<PageLogin />} />
+        <Route path="/login" element={<PageLogin />} /> */}
         {pages.map(({ component, path }) => {
           const Component = component;
-          return <Route key={path} element={<Component />} path={path} />;
+          return (
+            <Route
+              key={path}
+              element={
+                <Component />
+                // <ProtectedRoute>
+                //   <ScrollToTop />
+                //   <SiteHeader />
+                //   <Component />
+                //   {WIN_WIDTH < 768 && <FooterNav />}
+                //   <Footer />
+                // </ProtectedRoute>
+              }
+              path={path}
+            />
+          );
         })}
         <Route element={<Page404 />} />
       </Routes>
-
       {WIN_WIDTH < 768 && <FooterNav />}
       <Footer />
     </BrowserRouter>

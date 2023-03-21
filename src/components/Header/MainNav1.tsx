@@ -1,17 +1,20 @@
-import React, { FC } from "react";
-import Logo from "shared/Logo/Logo";
-import Navigation from "shared/Navigation/Navigation";
-import SearchDropdown from "./SearchDropdown";
-import ButtonPrimary from "shared/Button/ButtonPrimary";
-import MenuBar from "shared/MenuBar/MenuBar";
-import SwitchDarkMode from "shared/SwitchDarkMode/SwitchDarkMode";
 import HeroSearchForm2MobileFactory from "components/HeroSearchForm2Mobile/HeroSearchForm2MobileFactory";
+import { AuthContext } from "context/AuthContext";
+import { FC, useContext } from "react";
+import { auth } from "service/firebase";
+import ButtonPrimary from "shared/Button/ButtonPrimary";
+import Logo from "shared/Logo/Logo";
+import MenuBar from "shared/MenuBar/MenuBar";
+import Navigation from "shared/Navigation/Navigation";
+import SwitchDarkMode from "shared/SwitchDarkMode/SwitchDarkMode";
+import SearchDropdown from "./SearchDropdown";
 
 export interface MainNav1Props {
   className?: string;
 }
 
 const MainNav1: FC<MainNav1Props> = ({ className = "" }) => {
+  const user = useContext(AuthContext);
   return (
     <div className={`nc-MainNav1 relative z-10 ${className}`}>
       <div className="px-4 lg:container py-4 lg:py-5 relative flex justify-between items-center">
@@ -29,7 +32,13 @@ const MainNav1: FC<MainNav1Props> = ({ className = "" }) => {
             <SwitchDarkMode />
             <SearchDropdown />
             <div className="px-1" />
-            <ButtonPrimary href="/login">Sign up</ButtonPrimary>
+            {user ? (
+              <ButtonPrimary onClick={() => auth.signOut()}>
+                Log out
+              </ButtonPrimary>
+            ) : (
+              <ButtonPrimary href="/login">Sign up</ButtonPrimary>
+            )}
           </div>
           <div className="flex xl:hidden items-center">
             <SwitchDarkMode />
