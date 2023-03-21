@@ -7,6 +7,7 @@ import StayCard from "components/StayCard/StayCard";
 import tourApi, { tourType } from "api/tourApi";
 import { DEMO_STAY_CATEGORIES } from "data/taxonomies";
 import { DEMO_AUTHORS } from "data/authors";
+import { useParams } from "react-router-dom";
 
 // OTHER DEMO WILL PASS PROPS
 const DEMO_DATA: StayDataType[] = DEMO_STAY_LISTINGS.filter((_, i) => i < 8);
@@ -35,9 +36,11 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   const [tourList, setTourList] = useState<tourType[]>([]);
   const [card, setCard] = useState([]);
   const [tabActiveState, setTabActiveState] = useState(tabs![0].id);
+  const { id } = useParams();
+  
   useEffect(() => {
     (async () => {
-      const { data } = await tourApi.getByPlaceId({ placeId: tabActiveState });
+      const { data } = await tourApi.getById(Number(id));
       setTourList(data);
       setCard(
         data

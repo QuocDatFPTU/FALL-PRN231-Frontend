@@ -14,7 +14,7 @@ export type tourDetailType = {
   expiredDate: Date;
   transportationId: Number;
   tourDescription: String;
-  destination: destinationsType[];
+  destination: destinationsType;
   transportation: transportationTypeData[];
 };
 

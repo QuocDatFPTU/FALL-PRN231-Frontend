@@ -1,6 +1,8 @@
-import { TwMainColor } from "data/types";
-import React, { FC, ReactNode } from "react";
-import { Link } from "react-router-dom";
+import destinationApi from "api/destinationApi";
+import tourApi, { tourType } from "api/tourApi";
+import { TaxonomyType, TwMainColor } from "data/types";
+import React, { FC, ReactNode, useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 export interface BadgeProps {
   className?: string;
@@ -9,12 +11,15 @@ export interface BadgeProps {
   href?: string;
 }
 
+
+
 const Badge: FC<BadgeProps> = ({
   className = "relative",
   name,
   color = "blue",
   href,
 }) => {
+
   const getColorClass = (hasHover = true) => {
     switch (color) {
       case "pink":

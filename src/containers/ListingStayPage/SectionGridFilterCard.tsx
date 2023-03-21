@@ -40,7 +40,7 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
               id: e.id,
               authorId: 10,
               date: "May 20, 2021",
-              href: `/listing-tour-detail/${e.id}`,
+              href: `/listing-stay-detail/${e.id}`,
               listingCategoryId: 17,
               title: e.tourName,
               galleryImgs: destination.destinationImages.map(

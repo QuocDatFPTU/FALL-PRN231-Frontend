@@ -1,139 +1,166 @@
-import React, { FC, Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import LocationMarker from "components/AnyReactComponent/LocationMarker";
-import CommentListing from "components/CommentListing/CommentListing";
-import FiveStartIconForRate from "components/FiveStartIconForRate/FiveStartIconForRate";
-import GuestsInput from "components/HeroSearchForm/GuestsInput";
-import { DateRage } from "components/HeroSearchForm/StaySearchForm";
-import StartRating from "components/StartRating/StartRating";
-import GoogleMapReact from "google-map-react";
-import useWindowSize from "hooks/useWindowResize";
-import moment from "moment";
+import React, { FC, Fragment, useEffect, useState } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
+import LocationMarker from 'components/AnyReactComponent/LocationMarker'
+import CommentListing from 'components/CommentListing/CommentListing'
+import FiveStartIconForRate from 'components/FiveStartIconForRate/FiveStartIconForRate'
+import GuestsInput from 'components/HeroSearchForm/GuestsInput'
+import { DateRage } from 'components/HeroSearchForm/StaySearchForm'
+import StartRating from 'components/StartRating/StartRating'
+import GoogleMapReact from 'google-map-react'
+import useWindowSize from 'hooks/useWindowResize'
+import moment from 'moment'
 import {
   DayPickerRangeController,
   FocusedInputShape,
   isInclusivelyAfterDay,
-} from "react-dates";
-import Avatar from "shared/Avatar/Avatar";
-import Badge from "shared/Badge/Badge";
-import ButtonCircle from "shared/Button/ButtonCircle";
-import ButtonPrimary from "shared/Button/ButtonPrimary";
-import ButtonSecondary from "shared/Button/ButtonSecondary";
-import ButtonClose from "shared/ButtonClose/ButtonClose";
-import Input from "shared/Input/Input";
-import NcImage from "shared/NcImage/NcImage";
-import LikeSaveBtns from "./LikeSaveBtns";
-import ModalPhotos from "./ModalPhotos";
-import BackgroundSection from "components/BackgroundSection/BackgroundSection";
-import SectionSliderNewCategories from "components/SectionSliderNewCategories/SectionSliderNewCategories";
-import SectionSubscribe2 from "components/SectionSubscribe2/SectionSubscribe2";
-import StayDatesRangeInput from "components/HeroSearchForm/StayDatesRangeInput";
-import MobileFooterSticky from "./MobileFooterSticky";
+} from 'react-dates'
+import Avatar from 'shared/Avatar/Avatar'
+import Badge from 'shared/Badge/Badge'
+import ButtonCircle from 'shared/Button/ButtonCircle'
+import ButtonPrimary from 'shared/Button/ButtonPrimary'
+import ButtonSecondary from 'shared/Button/ButtonSecondary'
+import ButtonClose from 'shared/ButtonClose/ButtonClose'
+import Input from 'shared/Input/Input'
+import NcImage from 'shared/NcImage/NcImage'
+import LikeSaveBtns from './LikeSaveBtns'
+import ModalPhotos from './ModalPhotos'
+import BackgroundSection from 'components/BackgroundSection/BackgroundSection'
+import SectionSliderNewCategories from 'components/SectionSliderNewCategories/SectionSliderNewCategories'
+import SectionSubscribe2 from 'components/SectionSubscribe2/SectionSubscribe2'
+import StayDatesRangeInput from 'components/HeroSearchForm/StayDatesRangeInput'
+import MobileFooterSticky from './MobileFooterSticky'
+import { useParams } from 'react-router-dom'
+import destinationApi, { destinationsType } from 'api/destinationApi'
+import tourApi, { tourType } from 'api/tourApi'
+import { TaxonomyType } from 'data/types'
+import { tourGuideType } from 'api/tourGuideApi'
+import tourGuideApi from '../../api/tourGuideApi'
 
 export interface ListingStayDetailPageProps {
-  className?: string;
-  isPreviewMode?: boolean;
+  className?: string
+  isPreviewMode?: boolean
 }
 
 const PHOTOS: string[] = [
-  "https://images.pexels.com/photos/6129967/pexels-photo-6129967.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
-  "https://images.pexels.com/photos/7163619/pexels-photo-7163619.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  "https://images.pexels.com/photos/6527036/pexels-photo-6527036.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  "https://images.pexels.com/photos/6969831/pexels-photo-6969831.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  "https://images.pexels.com/photos/6438752/pexels-photo-6438752.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  "https://images.pexels.com/photos/1320686/pexels-photo-1320686.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  "https://images.pexels.com/photos/261394/pexels-photo-261394.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  "https://images.pexels.com/photos/2861361/pexels-photo-2861361.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  "https://images.pexels.com/photos/2677398/pexels-photo-2677398.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-];
+  'https://images.pexels.com/photos/6129967/pexels-photo-6129967.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
+  'https://images.pexels.com/photos/7163619/pexels-photo-7163619.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+  'https://images.pexels.com/photos/6527036/pexels-photo-6527036.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+  'https://images.pexels.com/photos/6969831/pexels-photo-6969831.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+  'https://images.pexels.com/photos/6438752/pexels-photo-6438752.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+  'https://images.pexels.com/photos/1320686/pexels-photo-1320686.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+  'https://images.pexels.com/photos/261394/pexels-photo-261394.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+  'https://images.pexels.com/photos/2861361/pexels-photo-2861361.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+  'https://images.pexels.com/photos/2677398/pexels-photo-2677398.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+]
 
 const Amenities_demos = [
-  { name: "la-key", icon: "la-key" },
-  { name: "la-luggage-cart", icon: "la-luggage-cart" },
-  { name: "la-shower", icon: "la-shower" },
-  { name: "la-smoking", icon: "la-smoking" },
-  { name: "la-snowflake", icon: "la-snowflake" },
-  { name: "la-spa", icon: "la-spa" },
-  { name: "la-suitcase", icon: "la-suitcase" },
-  { name: "la-suitcase-rolling", icon: "la-suitcase-rolling" },
-  { name: "la-swimmer", icon: "la-swimmer" },
-  { name: "la-swimming-pool", icon: "la-swimming-pool" },
-  { name: "la-tv", icon: "la-tv" },
-  { name: "la-umbrella-beach", icon: "la-umbrella-beach" },
-  { name: "la-utensils", icon: "la-utensils" },
-  { name: "la-wheelchair", icon: "la-wheelchair" },
-  { name: "la-wifi", icon: "la-wifi" },
-  { name: "la-baby-carriage", icon: "la-baby-carriage" },
-  { name: "la-bath", icon: "la-bath" },
-  { name: "la-bed", icon: "la-bed" },
-  { name: "la-briefcase", icon: "la-briefcase" },
-  { name: "la-car", icon: "la-car" },
-  { name: "la-cocktail", icon: "la-cocktail" },
-  { name: "la-coffee", icon: "la-coffee" },
-  { name: "la-concierge-bell", icon: "la-concierge-bell" },
-  { name: "la-dice", icon: "la-dice" },
-  { name: "la-dumbbell", icon: "la-dumbbell" },
-  { name: "la-hot-tub", icon: "la-hot-tub" },
-  { name: "la-infinity", icon: "la-infinity" },
-];
+  { name: 'la-key', icon: 'la-key' },
+  { name: 'la-luggage-cart', icon: 'la-luggage-cart' },
+  { name: 'la-shower', icon: 'la-shower' },
+  { name: 'la-smoking', icon: 'la-smoking' },
+  { name: 'la-snowflake', icon: 'la-snowflake' },
+  { name: 'la-spa', icon: 'la-spa' },
+  { name: 'la-suitcase', icon: 'la-suitcase' },
+  { name: 'la-suitcase-rolling', icon: 'la-suitcase-rolling' },
+  { name: 'la-swimmer', icon: 'la-swimmer' },
+  { name: 'la-swimming-pool', icon: 'la-swimming-pool' },
+  { name: 'la-tv', icon: 'la-tv' },
+  { name: 'la-umbrella-beach', icon: 'la-umbrella-beach' },
+  { name: 'la-utensils', icon: 'la-utensils' },
+  { name: 'la-wheelchair', icon: 'la-wheelchair' },
+  { name: 'la-wifi', icon: 'la-wifi' },
+  { name: 'la-baby-carriage', icon: 'la-baby-carriage' },
+  { name: 'la-bath', icon: 'la-bath' },
+  { name: 'la-bed', icon: 'la-bed' },
+  { name: 'la-briefcase', icon: 'la-briefcase' },
+  { name: 'la-car', icon: 'la-car' },
+  { name: 'la-cocktail', icon: 'la-cocktail' },
+  { name: 'la-coffee', icon: 'la-coffee' },
+  { name: 'la-concierge-bell', icon: 'la-concierge-bell' },
+  { name: 'la-dice', icon: 'la-dice' },
+  { name: 'la-dumbbell', icon: 'la-dumbbell' },
+  { name: 'la-hot-tub', icon: 'la-hot-tub' },
+  { name: 'la-infinity', icon: 'la-infinity' },
+]
 
 const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
-  className = "",
+  className = '',
   isPreviewMode,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [openFocusIndex, setOpenFocusIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false)
+  const [openFocusIndex, setOpenFocusIndex] = useState(0)
   const [selectedDate, setSelectedDate] = useState<DateRage>({
-    startDate: moment().add(4, "days"),
-    endDate: moment().add(10, "days"),
-  });
-  const [focusedInputSectionCheckDate, setFocusedInputSectionCheckDate] =
-    useState<FocusedInputShape>("startDate");
-  let [isOpenModalAmenities, setIsOpenModalAmenities] = useState(false);
+    startDate: moment().add(4, 'days'),
+    endDate: moment().add(10, 'days'),
+  })
+  const [
+    focusedInputSectionCheckDate,
+    setFocusedInputSectionCheckDate,
+  ] = useState<FocusedInputShape>('startDate')
+  let [isOpenModalAmenities, setIsOpenModalAmenities] = useState(false)
 
-  const windowSize = useWindowSize();
+  const windowSize = useWindowSize()
 
   const getDaySize = () => {
     if (windowSize.width <= 375) {
-      return 34;
+      return 34
     }
     if (windowSize.width <= 500) {
-      return undefined;
+      return undefined
     }
     if (windowSize.width <= 1280) {
-      return 56;
+      return 56
     }
-    return 48;
-  };
+    return 48
+  }
 
   function closeModalAmenities() {
-    setIsOpenModalAmenities(false);
+    setIsOpenModalAmenities(false)
   }
 
   function openModalAmenities() {
-    setIsOpenModalAmenities(true);
+    setIsOpenModalAmenities(true)
   }
 
   const handleOpenModal = (index: number) => {
-    setIsOpen(true);
-    setOpenFocusIndex(index);
-  };
+    setIsOpen(true)
+    setOpenFocusIndex(index)
+  }
 
-  const handleCloseModal = () => setIsOpen(false);
+  const handleCloseModal = () => setIsOpen(false)
 
-  const renderSection1 = () => {
+  const { id } = useParams()
+
+  const [destination, setDestinations] = useState<destinationsType>()
+  const [tour, setTour] = useState<tourType>()
+  const [guide, setGuide] = useState<tourGuideType>()
+  useEffect(() => {
+    ;(async () => {
+      const tours = await (await tourApi.getById(Number(id))).data.data
+      const destinations = await (await destinationApi.getAll({ tourId: id }))
+        .data.data
+      const tourguide = await (await tourGuideApi.getAll({ tourId: id })).data
+        .data
+      setTour(tours)
+      setDestinations(destinations)
+      setGuide(tourguide)
+      //console.log("tour", tour);
+    })()
+  }, [])
+
+  const renderSection1 = (e: tourType) => {
     return (
       <div className="listingSection__wrap !space-y-6">
         {/* 1 */}
         <div className="flex justify-between items-center">
-          <Badge name="Wooden house" />
+          <Badge name={`miền ${e ? e.tourDetails[0].destination.region : ''}`} />
           <LikeSaveBtns />
         </div>
 
         {/* 2 */}
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
-          Beach House in Collingwood
+          {e.tourName}
         </h2>
 
         {/* 3 */}
@@ -142,7 +169,10 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           <span>·</span>
           <span>
             <i className="las la-map-marker-alt"></i>
-            <span className="ml-1"> Tokyo, Jappan</span>
+            <span className="ml-1">
+              {' '}
+              {e.tourName}, {e.tourDetails[0].destination.name}
+            </span>
           </span>
         </div>
 
@@ -150,9 +180,9 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         <div className="flex items-center">
           <Avatar hasChecked sizeClass="h-10 w-10" radius="rounded-full" />
           <span className="ml-2.5 text-neutral-500 dark:text-neutral-400">
-            Hosted by{" "}
+            Guided by{' '}
             <span className="text-neutral-900 dark:text-neutral-200 font-medium">
-              Kevin Francis
+              {e.tourGuides.map((x) => x.tourGuideName)}
             </span>
           </span>
         </div>
@@ -165,16 +195,18 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           <div className="flex items-center space-x-3 ">
             <i className=" las la-user text-2xl "></i>
             <span className="">
-              6 <span className="hidden sm:inline-block">guests</span>
+              <a>{`${e.tourDuration} days`}</a>{' '}
+              <span className="hidden sm:inline-block">Duration</span>
             </span>
           </div>
           <div className="flex items-center space-x-3">
             <i className=" las la-bed text-2xl"></i>
             <span className=" ">
-              6 <span className="hidden sm:inline-block">beds</span>
+              <a>{`${e.tourCapacity} slots`}</a>{' '}
+              <span className="hidden sm:inline-block">Capacity</span>
             </span>
           </div>
-          <div className="flex items-center space-x-3">
+          {/* <div className="flex items-center space-x-3">
             <i className=" las la-bath text-2xl"></i>
             <span className=" ">
               3 <span className="hidden sm:inline-block">baths</span>
@@ -185,39 +217,28 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
             <span className=" ">
               2 <span className="hidden sm:inline-block">bedrooms</span>
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
-    );
-  };
+    )
+  }
 
-  const renderSection2 = () => {
+  const renderSection2 = (e: tourType) => {
     return (
       <div className="listingSection__wrap">
-        <h2 className="text-2xl font-semibold">Stay information</h2>
+        <h2 className="text-2xl font-semibold">Tour information</h2>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
         <div className="text-neutral-6000 dark:text-neutral-300">
-          <span>
-            Providing lake views, The Symphony 9 Tam Coc in Ninh Binh provides
-            accommodation, an outdoor swimming pool, a bar, a shared lounge, a
-            garden and barbecue facilities. Complimentary WiFi is provided.
-          </span>
+          <span>{e.tourDetails.map((x) => x.tourDescription)}</span>
           <br />
           <br />
-          <span>
-            There is a private bathroom with bidet in all units, along with a
-            hairdryer and free toiletries.
-          </span>
+          <span>{e.tourDetails.map((x) => x.tourDescription)}</span>
           <br /> <br />
-          <span>
-            The Symphony 9 Tam Coc offers a terrace. Both a bicycle rental
-            service and a car rental service are available at the accommodation,
-            while cycling can be enjoyed nearby.
-          </span>
+          <span>{e.tourDetails.map((x) => x.tourDescription)}</span>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   const renderSection3 = () => {
     return (
@@ -248,8 +269,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         </div>
         {renderMotalAmenities()}
       </div>
-    );
-  };
+    )
+  }
 
   const renderMotalAmenities = () => {
     return (
@@ -320,15 +341,15 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           </div>
         </Dialog>
       </Transition>
-    );
-  };
+    )
+  }
 
   const renderSection4 = () => {
     return (
       <div className="listingSection__wrap">
         {/* HEADING */}
         <div>
-          <h2 className="text-2xl font-semibold">Room Rates </h2>
+          <h2 className="text-2xl font-semibold">Tour Prices </h2>
           <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
             Prices may increase on weekends or holidays
           </span>
@@ -364,8 +385,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           </div>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   const renderSectionCheckIndate = () => {
     return (
@@ -388,7 +409,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
               onDatesChange={(date) => setSelectedDate(date)}
               focusedInput={focusedInputSectionCheckDate}
               onFocusChange={(focusedInput) =>
-                setFocusedInputSectionCheckDate(focusedInput || "startDate")
+                setFocusedInputSectionCheckDate(focusedInput || 'startDate')
               }
               initialVisibleMonth={null}
               numberOfMonths={windowSize.width < 1280 ? 1 : 2}
@@ -399,14 +420,14 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           </div>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
-  const renderSection5 = () => {
+  const renderSection5 = (e: tourType) => {
     return (
       <div className="listingSection__wrap">
         {/* HEADING */}
-        <h2 className="text-2xl font-semibold">Host Information</h2>
+        <h2 className="text-2xl font-semibold">Tour Guide Information</h2>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 
         {/* host */}
@@ -419,21 +440,23 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           />
           <div>
             <a className="block text-xl font-medium" href="##">
-              Kevin Francis
+              {e.tourGuides ? e.tourGuides.map((x) => x.tourGuideName) : ''}
             </a>
             <div className="mt-1.5 flex items-center text-sm text-neutral-500 dark:text-neutral-400">
               <StartRating />
               <span className="mx-2">·</span>
-              <span> 12 places</span>
+              <span>
+                <a>{`${e.tourGuides ? e.tourGuides.map(
+                  (x) => String(x.tourId).length,
+                ) : '' } places`}</a>
+              </span>
             </div>
           </div>
         </div>
 
         {/* desc */}
         <span className="block text-neutral-6000 dark:text-neutral-300">
-          Providing lake views, The Symphony 9 Tam Coc in Ninh Binh provides
-          accommodation, an outdoor swimming pool, a bar, a shared lounge, a
-          garden and barbecue facilities...
+          <a>{e.tourGuides ? e.tourGuides.map((x) => x.tourGuideBio) : ''}</a>
         </span>
 
         {/* info */}
@@ -498,8 +521,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           <ButtonSecondary href="##">See host profile</ButtonSecondary>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   const renderSection6 = () => {
     return (
@@ -538,17 +561,18 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           </div>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
-  const renderSection7 = () => {
+  const renderSection7 = (e: tourType) => {
     return (
       <div className="listingSection__wrap">
         {/* HEADING */}
         <div>
-          <h2 className="text-2xl font-semibold">Location</h2>
+          <h2 className="text-2xl font-semibold">Destination</h2>
           <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
-            San Diego, CA, United States of America (SAN-San Diego Intl.)
+            {e.tourName}, {e.tourDetails[0].destination.name},{' '}
+            {`miền ${e.tourDetails[0].destination.region}`}
           </span>
         </div>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
@@ -558,7 +582,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           <div className="rounded-xl overflow-hidden">
             <GoogleMapReact
               bootstrapURLKeys={{
-                key: "AIzaSyAGVJfZMAKYfZ71nzL_v5i3LjTTWnCYwTY",
+                key: 'AIzaSyAGVJfZMAKYfZ71nzL_v5i3LjTTWnCYwTY',
               }}
               yesIWantToUseGoogleMapApiInternals
               defaultZoom={15}
@@ -572,8 +596,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           </div>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   const renderSection8 = () => {
     return (
@@ -626,16 +650,16 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           </div>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
-  const renderSidebar = () => {
+  const renderSidebar = (e: tourType) => {
     return (
       <div className="listingSectionSidebar__wrap shadow-xl">
         {/* PRICE */}
         <div className="flex justify-between">
           <span className="text-3xl font-semibold">
-            $119
+            {`${e.tourPrices ? e.tourPrices.map((x) => x.priceChildren) : ''}`}
             <span className="ml-1 text-base font-normal text-neutral-500 dark:text-neutral-400">
               /night
             </span>
@@ -650,7 +674,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
             onChange={(date) => setSelectedDate(date)}
             fieldClassName="p-3"
             defaultValue={selectedDate}
-            anchorDirection={"right"}
+            anchorDirection={'right'}
             className="nc-ListingStayDetailPage__stayDatesRangeInput flex-1"
           />
           <div className="w-full border-b border-neutral-200 dark:border-neutral-700"></div>
@@ -684,10 +708,10 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         </div>
 
         {/* SUBMIT */}
-        <ButtonPrimary href={"/checkout"}>Reserve</ButtonPrimary>
+        <ButtonPrimary href={'/checkout'}>Reserve</ButtonPrimary>
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div
@@ -702,24 +726,29 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
               className="col-span-2 row-span-3 sm:row-span-2 relative rounded-md sm:rounded-xl overflow-hidden cursor-pointer"
               onClick={() => handleOpenModal(0)}
             >
-              <NcImage
-                containerClassName="absolute inset-0"
-                className="object-cover w-full h-full rounded-md sm:rounded-xl"
-                src={PHOTOS[0]}
-              />
+              {tour ? (
+                <NcImage
+                  containerClassName="absolute inset-0"
+                  className="object-cover w-full h-full rounded-md sm:rounded-xl"
+                  src={tour.tourDetails[0].destination.destinationImages[0].image.toString()}
+                />
+              ) : (
+                ''
+              )}
+
               <div className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-100 transition-opacity"></div>
             </div>
-            {PHOTOS.filter((_, i) => i >= 1 && i < 5).map((item, index) => (
+            {tour?.tourDetails[0].destination.destinationImages.map((x) => x.image.toString()).filter((_, i) => i >= 1 && i < 5).map((item, index) => (
               <div
                 key={index}
                 className={`relative rounded-md sm:rounded-xl overflow-hidden ${
-                  index >= 3 ? "hidden sm:block" : ""
+                  index >= 3 ? 'hidden sm:block' : ''
                 }`}
               >
                 <NcImage
                   containerClassName="aspect-w-4 aspect-h-3 sm:aspect-w-6 sm:aspect-h-5"
                   className="object-cover w-full h-full rounded-md sm:rounded-xl "
-                  src={item || ""}
+                  src={item || ''}
                 />
 
                 {/* OVERLAY */}
@@ -756,7 +785,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         </header>
         {/* MODAL PHOTOS */}
         <ModalPhotos
-          imgs={PHOTOS}
+          imgs={tour?.tourDetails[0].destination.destinationImages.map((x) => x.image.toString()) || []}
           isOpen={isOpen}
           onClose={handleCloseModal}
           initFocus={openFocusIndex}
@@ -768,20 +797,20 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
       <main className="container relative z-10 mt-11 flex flex-col lg:flex-row ">
         {/* CONTENT */}
         <div className="w-full lg:w-3/5 xl:w-2/3 space-y-8 lg:space-y-10 lg:pr-10">
-          {renderSection1()}
-          {renderSection2()}
+          {tour ? renderSection1(tour) : ''}
+          {tour ? renderSection2(tour) : ''}
           {renderSection3()}
           {renderSection4()}
           {renderSectionCheckIndate()}
-          {renderSection5()}
+          {tour ? renderSection5(tour) : ''}
           {renderSection6()}
-          {renderSection7()}
+          {tour ? renderSection7(tour) : ''}
           {renderSection8()}
         </div>
 
         {/* SIDEBAR */}
         <div className="hidden lg:block flex-grow mt-14 lg:mt-0">
-          <div className="sticky top-28">{renderSidebar()}</div>
+          <div className="sticky top-28">{tour ? renderSidebar(tour) : ''}</div>
         </div>
       </main>
 
@@ -800,7 +829,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
               categoryCardType="card5"
               itemPerRow={5}
               sliderStyle="style2"
-              uniqueClassName={"ListingStayDetailPage1"}
+              uniqueClassName={'ListingStayDetailPage1'}
             />
           </div>
 
@@ -809,7 +838,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ListingStayDetailPage;
+export default ListingStayDetailPage

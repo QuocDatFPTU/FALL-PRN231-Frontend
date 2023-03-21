@@ -3,7 +3,7 @@ import axiosClient from "./axiosClient";
 import { tourGuideType } from "./tourGuideApi";
 import { tourPriceType } from "./tourPriceApi";
 
-export type tourType = {
+export type bookingType = {
   id: Number;
   tourName: String;
   tourDuration: Number;
@@ -27,37 +27,37 @@ export type tourType = {
 
 const tourApi = {
   getAll(params?: any) {
-    const url = "/Tours";
+    const url = "/Bookings";
     return axiosClient.get(url, { params });
   },
 
   getByName(name: string) {
-    const url = `/Tours/${name}`;
+    const url = `/Bookings/${name}`;
     return axiosClient.get(url);
   },
 
   getById(id: Number) {
-    const url = `/Tours/${id}`;
+    const url = `/Bookings/${id}`;
     return axiosClient.get(url);
   },
 
   // getByPlaceId(params: any) {
-  //   const url = `/Tours/getToutByPlaceId`;
+  //   const url = `/Bookings/getToutByPlaceId`;
   //   return axiosClient.get(url, { params });
   // },
 
-  create(data: tourType) {
-    const url = "/Tours";
+  create(data: bookingType) {
+    const url = "/Bookings";
     return axiosClient.post(url, data);
   },
 
-  update(data: tourType) {
-    const url = "/Tours";
+  update(data: bookingType) {
+    const url = "/Bookings";
     return axiosClient.put(url, data);
   },
 
   delete(id: Number) {
-    const url = `/Tours/${id}`;
+    const url = `/Bookings/${id}`;
     return axiosClient.delete(url);
   },
 };

@@ -1,34 +1,43 @@
-import { avatarColors } from "contains/contants";
-import React, { FC } from "react";
-import avatar1 from "images/avatars/Image-1.png";
+import tourApi, { tourType } from 'api/tourApi'
+import { avatarColors } from 'contains/contants'
+import avatar1 from 'images/avatars/Image-1.png'
+import { FC, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 export interface AvatarProps {
-  containerClassName?: string;
-  sizeClass?: string;
-  radius?: string;
-  imgUrl?: string;
-  userName?: string;
-  hasChecked?: boolean;
-  hasCheckedClass?: string;
+  containerClassName?: string
+  sizeClass?: string
+  radius?: string
+  imgUrl?: string
+  userName?: string
+  hasChecked?: boolean
+  hasCheckedClass?: string
 }
-
 const Avatar: FC<AvatarProps> = ({
-  containerClassName = "ring-1 ring-white dark:ring-neutral-900",
-  sizeClass = "h-6 w-6 text-sm",
-  radius = "rounded-full",
+  containerClassName = 'ring-1 ring-white dark:ring-neutral-900',
+  sizeClass = 'h-6 w-6 text-sm',
+  radius = 'rounded-full',
   imgUrl = avatar1,
   userName,
   hasChecked,
-  hasCheckedClass = "w-4 h-4 -top-0.5 -right-0.5",
+  hasCheckedClass = 'w-4 h-4 -top-0.5 -right-0.5',
 }) => {
-  const url = imgUrl || "";
-  const name = userName || "John Doe";
+  const { id } = useParams()
+  const [tour, setTour] = useState<tourType>()
+  useEffect(() => {
+    ;(async () => {
+      const tours = await (await tourApi.getById(Number(id))).data.data
+      setTour(tours)
+      //console.log("tour", tour);
+    })()
+  }, [])
+
+  const url = tour?.tourGuides[0].tourGuideAva.toString() ?? ''
+  const name = userName || 'John Doe'
   const _setBgColor = (name: string) => {
-    const backgroundIndex = Math.floor(
-      name.charCodeAt(0) % avatarColors.length
-    );
-    return avatarColors[backgroundIndex];
-  };
+    const backgroundIndex = Math.floor(name.charCodeAt(0) % avatarColors.length)
+    return avatarColors[backgroundIndex]
+  }
 
   return (
     <div
@@ -52,7 +61,7 @@ const Avatar: FC<AvatarProps> = ({
         </span>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Avatar;
+export default Avatar

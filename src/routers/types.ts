@@ -12,7 +12,7 @@ export interface LocationStates {
   "/listing-stay"?: {};
   "/listing-stay/:id"?: {};
   "/listing-stay-map"?: {};
-  "/listing-stay-detail"?: {};
+  "/listing-stay-detail/:id"?: {};
   //
   "/listing-tour"?: {};
   //

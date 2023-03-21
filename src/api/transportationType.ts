@@ -32,10 +32,10 @@ const transportationsApi = {
     return axiosClient.get(url);
   },
 
-  getByPlaceId(params: any) {
-    const url = `/Transportations/getToutByPlaceId`;
-    return axiosClient.get(url, { params });
-  },
+  // getByPlaceId(params: any) {
+  //   const url = `/Transportations/getToutByPlaceId`;
+  //   return axiosClient.get(url, { params });
+  // },
 
   create(data: transportationTypeData) {
     const url = "/Transportations";

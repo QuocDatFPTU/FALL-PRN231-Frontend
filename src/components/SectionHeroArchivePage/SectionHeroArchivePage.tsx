@@ -41,7 +41,7 @@ const SectionHeroArchivePage: FC<SectionHeroArchivePageProps> = ({
             ) : (
               <>
                 <i className="text-2xl las la-home"></i>
-                <span className="ml-2.5"> tours</span>
+                <span className="ml-2.5"> {data ? `${data.id}`.length : 0} tours</span>
               </>
             )}
           </div>
