@@ -19,7 +19,6 @@ export type bookingType = {
 
 export type createBookingType = {
   tourId: Number;
-  customerId: Number;
   bookingDate: Date;
   numAdults: Number;
   numChildren: Number;

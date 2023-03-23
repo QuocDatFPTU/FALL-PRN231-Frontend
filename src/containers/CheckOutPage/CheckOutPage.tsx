@@ -56,7 +56,6 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = '' }) => {
   const bookingCreate = async () => {
     const data: createBookingType = {
       tourId: tour?.id ?? 0,
-      customerId: 1,
       bookingDate: new Date(),
       numAdults: guests.guestAdults ?? 0,
       numChildren: guests.guestChildren ?? 0,
