@@ -1,48 +1,71 @@
-import bookingApi, { bookingType } from 'api/bookingApi'
-import { tourType } from 'api/tourApi'
-import StartRating from 'components/StartRating/StartRating'
-import moment from 'moment'
-import { FC, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import ButtonPrimary from 'shared/Button/ButtonPrimary'
-import tourApi from './../../api/tourApi'
-import { DateRage } from './../../components/HeroSearchForm2/FlightSearchForm'
+import bookingApi, { bookingType } from "api/bookingApi";
+import paymentApi from "api/paymentApi";
+import { tourType } from "api/tourApi";
+import StartRating from "components/StartRating/StartRating";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { random } from "lodash";
+import moment from "moment";
+import { FC, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { storage } from "service/firebase";
+import ButtonPrimary from "shared/Button/ButtonPrimary";
+import tourApi from "./../../api/tourApi";
+import { DateRage } from "./../../components/HeroSearchForm2/FlightSearchForm";
 
 export interface PayPageProps {
-  className?: string
+  className?: string;
 }
 
-const PayPage: FC<PayPageProps> = ({ className = '' }) => {
-  const [file, setFile] = useState<string>('')
+const PayPage: FC<PayPageProps> = ({ className = "" }) => {
+  const [file, setFile] = useState<any>("");
   function handleChange(e: any) {
-    console.log(e.target.files)
-    setFile(URL.createObjectURL(e.target.files[0]))
+    console.log(e.target.files);
+    setFile(URL.createObjectURL(e.target.files[0]));
   }
 
-  const { id } = useParams()
+  const { id } = useParams();
   const [selectedDate, setSelectedDate] = useState<DateRage>({
-    startDate: moment().add(4, 'days'),
-    endDate: moment().add(10, 'days'),
-  })
-  const [tour, setTour] = useState<tourType>()
-  const [booking, setBooking] = useState<bookingType>()
-  const [paymentMethod, setpaymentMethod] = useState('1')
+    startDate: moment().add(4, "days"),
+    endDate: moment().add(10, "days"),
+  });
+  const [tour, setTour] = useState<tourType>();
+  const [booking, setBooking] = useState<bookingType>();
+  const [paymentMethod, setpaymentMethod] = useState("1");
   useEffect(() => {
     (async () => {
-      const tours = await (await tourApi.getById(Number(id))).data.data
-      const bookings = await (await bookingApi.getById(Number(id))).data.data
+      const tours = await (await tourApi.getById(Number(id))).data.data;
+      const bookings = await (await bookingApi.getById(Number(id))).data.data;
       setSelectedDate({
         startDate: moment(bookings.tour.tourDetails[0].startDate),
         endDate: moment(bookings.tour.tourDetails[0].endDate),
-      })
-      setTour(tours)
-      setBooking(bookings)
+      });
+      setTour(tours);
+      setBooking(bookings);
       // console.log('tour', tours)
-    })()
-  }, [])
+    })();
+  }, []);
 
- // console.log('fabdfih');
- 
+  const handleUpload = () => {
+    if (!file) {
+      alert("Please upload an image first!");
+    }
+    const storageRef = ref(storage, `/files/${file}/${new Date().getTime()}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {},
+      (err) => console.log(err),
+      () => {
+        // download url
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          paymentApi.putImage(booking?.payments[0].id, url);
+        });
+      }
+    );
+  };
+
+  // console.log('fabdfih');
+
   // const bookingCreate = async () => {
   //   const data: createBookingType = {
   //     tourId: tour?.id ?? 0,
@@ -81,7 +104,7 @@ const PayPage: FC<PayPageProps> = ({ className = '' }) => {
             <div className="pt-5  sm:pb-5 sm:px-5 space-y-3">
               <div>
                 <span className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-1">
-                  {booking.tour.tourDetails[0].destination.name}, miền{' '}
+                  {booking.tour.tourDetails[0].destination.name}, miền{" "}
                   {booking.tour.tourDetails[0]?.destination.region}
                 </span>
                 <span className="text-base sm:text-lg font-medium mt-1 block">
@@ -89,7 +112,7 @@ const PayPage: FC<PayPageProps> = ({ className = '' }) => {
                 </span>
               </div>
               <span className="block  text-sm text-neutral-500 dark:text-neutral-400">
-                {booking.tour.tourDuration.toString()} days ·{' '}
+                {booking.tour.tourDuration.toString()} days ·{" "}
                 {booking.tour.tourCapacity.toString()} slots
               </span>
               <div className="w-10 border-b border-neutral-200  dark:border-neutral-700"></div>
@@ -116,7 +139,7 @@ const PayPage: FC<PayPageProps> = ({ className = '' }) => {
               <div className="flex flex-col">
                 <span className="text-sm text-neutral-400">Date</span>
                 <span className="mt-1.5 text-lg font-semibold">
-                  {booking.tour.tourDetails[0].startDate} -{' '}
+                  {booking.tour.tourDetails[0].startDate} -{" "}
                   {booking.tour.tourDetails[0].endDate}
                 </span>
               </div>
@@ -140,9 +163,11 @@ const PayPage: FC<PayPageProps> = ({ className = '' }) => {
               <div className="flex flex-col">
                 <span className="text-sm text-neutral-400">Guests</span>
                 <span className="mt-1.5 text-lg font-semibold">
-                  {(Number(booking?.numAdults ?? 0) +
+                  {(
+                    Number(booking?.numAdults ?? 0) +
                     Number(booking?.numChildren ?? 0) +
-                    Number(booking?.numInfants ?? 0)).toString()}
+                    Number(booking?.numInfants ?? 0)
+                  ).toString()}
                 </span>
               </div>
             </div>
@@ -162,7 +187,7 @@ const PayPage: FC<PayPageProps> = ({ className = '' }) => {
             <div className="flex text-neutral-6000 dark:text-neutral-300">
               <span className="flex-1">Date</span>
               <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-              {booking.payments[0].paymentDate}
+                {booking.payments[0].paymentDate}
               </span>
             </div>
             <div className="flex text-neutral-6000 dark:text-neutral-300">
@@ -174,19 +199,21 @@ const PayPage: FC<PayPageProps> = ({ className = '' }) => {
             <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
               <span className="flex-1">Payment method</span>
               <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                {booking.payments[0].paymentMethod == 1 ? 'COD' : 'E-Banking'}
+                {booking.payments[0].paymentMethod == 1 ? "COD" : "E-Banking"}
               </span>
             </div>
           </div>
         </div>
         <div>
-          <ButtonPrimary href="/">Explore more stays</ButtonPrimary>
+          <ButtonPrimary onClick={handleUpload}>
+            Explore more stays
+          </ButtonPrimary>
         </div>
       </div>
     ) : (
-      ''
-    )
-  }
+      ""
+    );
+  };
 
   return (
     <div className={`nc-PayPage ${className}`} data-nc-id="PayPage">
@@ -194,7 +221,7 @@ const PayPage: FC<PayPageProps> = ({ className = '' }) => {
         <div className="max-w-4xl mx-auto">{renderContent()}</div>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default PayPage
+export default PayPage;

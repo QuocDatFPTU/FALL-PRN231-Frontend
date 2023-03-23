@@ -1,5 +1,5 @@
 import axiosClient from "./axiosClient";
-import { bookingType, createBookingType } from 'api/bookingApi';
+import { bookingType, createBookingType } from "api/bookingApi";
 
 export type paymentType = {
   id: Number;
@@ -42,6 +42,10 @@ const paymentApi = {
   update(data: paymentType) {
     const url = "/Bookings";
     return axiosClient.put(url, data);
+  },
+  putImage(id: Number, image: string) {
+    const url = `/Payment${id}`;
+    return axiosClient.put(url, image);
   },
 
   delete(id: Number) {
