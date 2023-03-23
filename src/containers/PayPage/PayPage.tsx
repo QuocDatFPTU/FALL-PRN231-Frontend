@@ -30,7 +30,7 @@ const PayPage: FC<PayPageProps> = ({ className = "" }) => {
   const navigate = useNavigate();
   const [tour, setTour] = useState<tourType>();
   const [booking, setBooking] = useState<bookingType>();
-  const [paymentMethod, setpaymentMethod] = useState("1");
+  const [paymentMethod, setpaymentMethod] = useState("");
   useEffect(() => {
     (async () => {
       const tours = await (await tourApi.getById(Number(id))).data.data;

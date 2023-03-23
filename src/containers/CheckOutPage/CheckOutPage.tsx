@@ -39,7 +39,7 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = '' }) => {
     endDate: moment().add(10, 'days'),
   })
   const [tour, setTour] = useState<tourType>()
-  const [paymentMethod, setpaymentMethod] = useState('1')
+  const [paymentMethod, setpaymentMethod] = useState('')
   useEffect(() => {
     ;(async () => {
       const tours = await (await tourApi.getById(Number(id))).data.data
@@ -251,8 +251,8 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = '' }) => {
                       }`}
                     >
                       <span className="mr-2.5">COD</span>
-                      <img className="w-8" src={visaPng} alt="" />
-                      <img className="w-8" src={mastercardPng} alt="" />
+                      {/* <img className="w-8" src={visaPng} alt="" />
+                      <img className="w-8" src={mastercardPng} alt="" /> */}
                     </button>
                   )}
                 </Tab>
