@@ -6,7 +6,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { random } from "lodash";
 import moment from "moment";
 import { FC, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { storage } from "service/firebase";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import tourApi from "./../../api/tourApi";
@@ -19,8 +19,7 @@ export interface PayPageProps {
 const PayPage: FC<PayPageProps> = ({ className = "" }) => {
   const [file, setFile] = useState<any>("");
   function handleChange(e: any) {
-    console.log(e.target.files);
-    setFile(URL.createObjectURL(e.target.files[0]));
+    setFile(e.target.files[0]);
   }
 
   const { id } = useParams();
@@ -28,6 +27,7 @@ const PayPage: FC<PayPageProps> = ({ className = "" }) => {
     startDate: moment().add(4, "days"),
     endDate: moment().add(10, "days"),
   });
+  const navigate = useNavigate();
   const [tour, setTour] = useState<tourType>();
   const [booking, setBooking] = useState<bookingType>();
   const [paymentMethod, setpaymentMethod] = useState("1");
@@ -51,14 +51,18 @@ const PayPage: FC<PayPageProps> = ({ className = "" }) => {
     }
     const storageRef = ref(storage, `/files/${new Date().getTime()}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
     const uploadTask = uploadBytesResumable(storageRef, file);
+
     uploadTask.on(
       "state_changed",
       (snapshot) => {},
       (err) => console.log(err),
       () => {
         // download url
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          paymentApi.putImage(booking?.payments[0].id, url);
+        getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
+          const res = await paymentApi.putImage(booking?.payments[0].id, url);
+          if (res.data.status.isSuccess == true) {
+            navigate("/");
+          }
         });
       }
     );
