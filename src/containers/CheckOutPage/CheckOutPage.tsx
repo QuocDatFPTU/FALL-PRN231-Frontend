@@ -1,56 +1,85 @@
-import { Tab } from "@headlessui/react";
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import React, { FC, Fragment, useEffect, useState } from "react";
-import visaPng from "images/vis.png";
-import mastercardPng from "images/mastercard.svg";
-import Input from "shared/Input/Input";
-import Label from "components/Label/Label";
-import Textarea from "shared/Textarea/Textarea";
-import ButtonPrimary from "shared/Button/ButtonPrimary";
-import NcImage from "shared/NcImage/NcImage";
-import StartRating from "components/StartRating/StartRating";
-import NcModal from "shared/NcModal/NcModal";
-import ModalSelectDate from "components/ModalSelectDate";
-import moment from "moment";
-import { DateRage } from "components/HeroSearchForm/StaySearchForm";
-import converSelectedDateToString from "utils/converSelectedDateToString";
-import ModalSelectGuests from "components/ModalSelectGuests";
-import { GuestsObject } from "components/HeroSearchForm2Mobile/GuestsInput";
-import tourApi, { tourType } from "api/tourApi";
-import { useParams } from "react-router-dom";
+import { Tab } from '@headlessui/react'
+import { PencilSquareIcon } from '@heroicons/react/24/outline'
+import bookingApi, { createBookingType } from 'api/bookingApi'
+import tourApi, { tourType } from 'api/tourApi'
+import { DateRage } from 'components/HeroSearchForm/StaySearchForm'
+import { GuestsObject } from 'components/HeroSearchForm2Mobile/GuestsInput'
+import ModalSelectDate from 'components/ModalSelectDate'
+import ModalSelectGuests from 'components/ModalSelectGuests'
+import StartRating from 'components/StartRating/StartRating'
+import mastercardPng from 'images/mastercard.svg'
+import visaPng from 'images/vis.png'
+import moment from 'moment'
+import { FC, Fragment, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import ButtonPrimary from 'shared/Button/ButtonPrimary'
+import NcImage from 'shared/NcImage/NcImage'
+import NcModal from 'shared/NcModal/NcModal'
+import converSelectedDateToString from 'utils/converSelectedDateToString'
+import { useNavigate } from 'react-router-dom';
 
 export interface CheckOutPageProps {
-  className?: string;
+  className?: string
 }
 
-const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
+const CheckOutPage: FC<CheckOutPageProps> = ({ className = '' }) => {
   const [rangeDates, setRangeDates] = useState<DateRage>({
-    startDate: moment().add(1, "day"),
-    endDate: moment().add(5, "days"),
-  });
+    startDate: moment().add(1, 'day'),
+    endDate: moment().add(5, 'days'),
+  })
   const [guests, setGuests] = useState<GuestsObject>({
     guestAdults: 1,
     guestChildren: 0,
     guestInfants: 0,
-  });
+  })
 
-  const { id } = useParams();
+  const { id } = useParams()
   const [selectedDate, setSelectedDate] = useState<DateRage>({
-    startDate: moment().add(4, "days"),
-    endDate: moment().add(10, "days"),
-  });
-  const [tour, setTour] = useState<tourType>();
+    startDate: moment().add(4, 'days'),
+    endDate: moment().add(10, 'days'),
+  })
+  const [tour, setTour] = useState<tourType>()
+  const [paymentMethod, setpaymentMethod] = useState('1')
   useEffect(() => {
-    (async () => {
-      const tours = await (await tourApi.getById(Number(id))).data.data;
+    ;(async () => {
+      const tours = await (await tourApi.getById(Number(id))).data.data
       setSelectedDate({
         startDate: moment(tours?.tourDetails[0].startDate),
         endDate: moment(tours?.tourDetails[0].endDate),
-      });
-      setTour(tours);
-      console.log("tour", tours);
-    })();
-  }, []);
+      })
+      setTour(tours)
+      console.log('tour', tours)
+    })()
+  }, [])
+
+  const navigate = useNavigate()
+  const bookingCreate = async () => {
+    const data: createBookingType = {
+      tourId: tour?.id ?? 0,
+      customerId: 1,
+      bookingDate: new Date(),
+      numAdults: guests.guestAdults ?? 0,
+      numChildren: guests.guestChildren ?? 0,
+      numInfants: guests.guestInfants ?? 0,
+      totalPrice: totalPrice,
+      paymentMethod: paymentMethod,
+    }
+    const booking = await bookingApi.create(data)
+    console.log(booking.data)
+    navigate(`/pay-done/${booking.data.data.id}`, {replace: true})
+    // window.location.href=`pay-done/${booking.data.data.id}`
+    
+  }
+  const [totalPrice, settotalPrice] = useState(0)
+  useEffect(() => {
+    if (tour)
+      settotalPrice(
+        Number(tour.tourPrices[0]?.priceAdults) * (guests.guestAdults ?? 0) +
+          Number(tour.tourPrices[0]?.priceChildren) *
+            (guests.guestChildren ?? 0) +
+          Number(tour.tourPrices[0]?.priceInfants) * (guests.guestInfants ?? 0),
+      )
+  }, [guests, tour])
 
   const renderSidebar = () => {
     return tour && tour?.tourDetails.length !== 0 ? (
@@ -66,7 +95,7 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
           <div className="py-5 sm:px-5 space-y-3">
             <div>
               <span className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-1">
-                {tour.tourDetails[0].destination.name}, miền{" "}
+                {tour.tourDetails[0].destination.name}, miền{' '}
                 {tour.tourDetails[0]?.destination.region}
               </span>
               <span className="text-base font-medium mt-1 block">
@@ -74,7 +103,7 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
               </span>
             </div>
             <span className="block  text-sm text-neutral-500 dark:text-neutral-400">
-              {tour.tourDuration.toString()} days ·{" "}
+              {tour.tourDuration.toString()} days ·{' '}
               {tour.tourCapacity.toString()} slots
             </span>
             <div className="w-10 border-b border-neutral-200  dark:border-neutral-700"></div>
@@ -87,21 +116,21 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
             <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
               <span>Aldult</span>
               <span>
-                ${tour.tourPrices[0].priceAdults.toString()} x{" "}
+                ${tour.tourPrices[0].priceAdults.toString()} x{' '}
                 {guests.guestAdults}
               </span>
             </div>
             <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
               <span>Children</span>
               <span>
-                ${tour.tourPrices[0].priceChildren.toString()} x{" "}
+                ${tour.tourPrices[0].priceChildren.toString()} x{' '}
                 {guests.guestChildren}
               </span>
             </div>
             <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
               <span>Infants</span>
               <span>
-                ${tour.tourPrices[0].priceInfants.toString()} x{" "}
+                ${tour.tourPrices[0].priceInfants.toString()} x{' '}
                 {guests.guestInfants}
               </span>
             </div>
@@ -110,24 +139,15 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
 
             <div className="flex justify-between font-semibold">
               <span>Total</span>
-              <span>
-                {(
-                  Number(tour.tourPrices[0]?.priceAdults) *
-                    (guests.guestAdults ?? 0) +
-                  Number(tour.tourPrices[0]?.priceChildren) *
-                    (guests.guestChildren ?? 0) +
-                  Number(tour.tourPrices[0]?.priceInfants) *
-                    (guests.guestInfants ?? 0)
-                ).toString()}
-              </span>
+              <span>{totalPrice.toString()}</span>
             </div>
           </div>
         )}
       </div>
     ) : (
-      ""
-    );
-  };
+      ''
+    )
+  }
 
   const renderMain = () => {
     return (
@@ -210,26 +230,28 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
                 <Tab as={Fragment}>
                   {({ selected }) => (
                     <button
+                      onClick={() => setpaymentMethod('2')}
                       className={`px-4 py-1.5 sm:px-6 sm:py-2.5 rounded-full focus:outline-none ${
                         selected
-                          ? "bg-neutral-800 dark:bg-neutral-300 text-white dark:text-neutral-900"
-                          : "text-neutral-6000 dark:text-neutral-400"
+                          ? 'bg-neutral-800 dark:bg-neutral-300 text-white dark:text-neutral-900'
+                          : 'text-neutral-6000 dark:text-neutral-400'
                       }`}
                     >
-                      Paypal
+                      E-Banking
                     </button>
                   )}
                 </Tab>
                 <Tab as={Fragment}>
                   {({ selected }) => (
                     <button
+                      onClick={() => setpaymentMethod('1')}
                       className={`px-4 py-1.5 sm:px-6 sm:py-2.5  rounded-full flex items-center justify-center focus:outline-none  ${
                         selected
-                          ? "bg-neutral-800 dark:bg-neutral-300 text-white dark:text-neutral-900"
-                          : " text-neutral-6000 dark:text-neutral-400"
+                          ? 'bg-neutral-800 dark:bg-neutral-300 text-white dark:text-neutral-900'
+                          : ' text-neutral-6000 dark:text-neutral-400'
                       }`}
                     >
-                      <span className="mr-2.5">Credit card</span>
+                      <span className="mr-2.5">COD</span>
                       <img className="w-8" src={visaPng} alt="" />
                       <img className="w-8" src={mastercardPng} alt="" />
                     </button>
@@ -237,7 +259,7 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
                 </Tab>
               </Tab.List>
 
-              <Tab.Panels>
+              {/* <Tab.Panels>
                 <Tab.Panel className="space-y-5">
                   <div className="space-y-1">
                     <Label>Card number </Label>
@@ -282,16 +304,18 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
                     </span>
                   </div>
                 </Tab.Panel>
-              </Tab.Panels>
+              </Tab.Panels> */}
             </Tab.Group>
             <div className="pt-8">
-              <ButtonPrimary href={"/pay-done"}>Confirm and pay</ButtonPrimary>
+              <ButtonPrimary onClick={bookingCreate}>
+                Confirm and pay
+              </ButtonPrimary>
             </div>
           </div>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div className={`nc-CheckOutPage ${className}`} data-nc-id="CheckOutPage">
@@ -300,7 +324,7 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
         <div className="hidden lg:block flex-grow">{renderSidebar()}</div>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default CheckOutPage;
+export default CheckOutPage

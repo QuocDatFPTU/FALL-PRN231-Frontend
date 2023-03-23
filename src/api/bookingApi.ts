@@ -2,17 +2,30 @@ import { tourDetailType } from "api/tourDetailsApi";
 import axiosClient from "./axiosClient";
 import { tourGuideType } from "./tourGuideApi";
 import { tourPriceType } from "./tourPriceApi";
+import { tourType } from 'api/tourApi';
 
 export type bookingType = {
-  id: Number;
-  tourName: String;
-  tourDuration: Number;
-  tourCapacity: Number;
-  status: Number;
-  tourGuideId: Number;
-  tourGuides: tourGuideType[];
-  tourPrices: tourPriceType[];
-  tourDetails: tourDetailType[];
+  tourId: Number,
+  customerId: Number,
+  bookingDate: Date,
+  numAdults: Number,
+  numChildren: Number,
+  numInfants: Number,
+  totalPrice: Number,
+  tour: tourType,
+  customer: any,
+  payments: any,
+};
+
+export type createBookingType = {
+  tourId: Number;
+  customerId: Number;
+  bookingDate: Date;
+  numAdults: Number;
+  numChildren: Number;
+  numInfants: Number;
+  totalPrice: Number;
+  paymentMethod: String;
 };
 
 // export type TourData = {
@@ -25,7 +38,7 @@ export type bookingType = {
 //   available: Number;
 // };
 
-const tourApi = {
+const bookingApi = {
   getAll(params?: any) {
     const url = "/Bookings";
     return axiosClient.get(url, { params });
@@ -46,7 +59,7 @@ const tourApi = {
   //   return axiosClient.get(url, { params });
   // },
 
-  create(data: bookingType) {
+  create(data: createBookingType) {
     const url = "/Bookings";
     return axiosClient.post(url, data);
   },
@@ -62,4 +75,4 @@ const tourApi = {
   },
 };
 
-export default tourApi;
+export default bookingApi;

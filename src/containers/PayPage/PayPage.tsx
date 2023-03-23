@@ -1,15 +1,64 @@
-import StartRating from "components/StartRating/StartRating";
-import React, { FC } from "react";
-import ButtonPrimary from "shared/Button/ButtonPrimary";
-import NcImage from "shared/NcImage/NcImage";
+import bookingApi, { bookingType } from 'api/bookingApi'
+import { tourType } from 'api/tourApi'
+import StartRating from 'components/StartRating/StartRating'
+import moment from 'moment'
+import { FC, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import ButtonPrimary from 'shared/Button/ButtonPrimary'
+import tourApi from './../../api/tourApi'
+import { DateRage } from './../../components/HeroSearchForm2/FlightSearchForm'
 
 export interface PayPageProps {
-  className?: string;
+  className?: string
 }
 
-const PayPage: FC<PayPageProps> = ({ className = "" }) => {
+const PayPage: FC<PayPageProps> = ({ className = '' }) => {
+  const [file, setFile] = useState<string>('')
+  function handleChange(e: any) {
+    console.log(e.target.files)
+    setFile(URL.createObjectURL(e.target.files[0]))
+  }
+
+  const { id } = useParams()
+  const [selectedDate, setSelectedDate] = useState<DateRage>({
+    startDate: moment().add(4, 'days'),
+    endDate: moment().add(10, 'days'),
+  })
+  const [tour, setTour] = useState<tourType>()
+  const [booking, setBooking] = useState<bookingType>()
+  const [paymentMethod, setpaymentMethod] = useState('1')
+  useEffect(() => {
+    (async () => {
+      const tours = await (await tourApi.getById(Number(id))).data.data
+      const bookings = await (await bookingApi.getById(Number(id))).data.data
+      setSelectedDate({
+        startDate: moment(bookings.tour.tourDetails[0].startDate),
+        endDate: moment(bookings.tour.tourDetails[0].endDate),
+      })
+      setTour(tours)
+      setBooking(bookings)
+      // console.log('tour', tours)
+    })()
+  }, [])
+
+ // console.log('fabdfih');
+ 
+  // const bookingCreate = async () => {
+  //   const data: createBookingType = {
+  //     tourId: tour?.id ?? 0,
+  //     customerId: 1,
+  //     bookingDate: new Date(),
+  //     numAdults: guests.guestAdults ?? 0,
+  //     numChildren: guests.guestChildren ?? 0,
+  //     numInfants: guests.guestInfants ?? 0,
+  //     totalPrice: totalPrice,
+  //     paymentMethod: paymentMethod,
+  //   }
+  //   const booking = await bookingApi.create(data)
+  //   console.log(booking.data)
+  // }
   const renderContent = () => {
-    return (
+    return booking && booking.tour && booking.tour?.tourDetails.length !== 0 ? (
       <div className="w-full flex flex-col sm:rounded-2xl sm:border border-neutral-200 dark:border-neutral-700 space-y-8 px-0 sm:p-6 xl:p-8">
         <h2 className="text-3xl lg:text-4xl font-semibold">
           Congratulation 🎉
@@ -21,22 +70,27 @@ const PayPage: FC<PayPageProps> = ({ className = "" }) => {
         <div className="space-y-6">
           <h3 className="text-2xl font-semibold">Your booking</h3>
           <div className="flex flex-col sm:flex-row sm:items-center">
-            <div className="flex-shrink-0 w-full sm:w-40">
+            <h2>Add Image:</h2>
+            <input type="file" onChange={handleChange} />
+            <img src={file} />
+            {/* <div className="flex-shrink-0 w-full sm:w-40">
               <div className=" aspect-w-4 aspect-h-3 sm:aspect-h-4 rounded-2xl overflow-hidden">
                 <NcImage src="https://images.pexels.com/photos/6373478/pexels-photo-6373478.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" />
               </div>
-            </div>
+            </div> */}
             <div className="pt-5  sm:pb-5 sm:px-5 space-y-3">
               <div>
                 <span className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-1">
-                  Hotel room in Tokyo, Jappan
+                  {booking.tour.tourDetails[0].destination.name}, miền{' '}
+                  {booking.tour.tourDetails[0]?.destination.region}
                 </span>
                 <span className="text-base sm:text-lg font-medium mt-1 block">
-                  The Lounge & Bar
+                  {booking.tour.tourName}
                 </span>
               </div>
               <span className="block  text-sm text-neutral-500 dark:text-neutral-400">
-                2 beds · 2 baths
+                {booking.tour.tourDuration.toString()} days ·{' '}
+                {booking.tour.tourCapacity.toString()} slots
               </span>
               <div className="w-10 border-b border-neutral-200  dark:border-neutral-700"></div>
               <StartRating />
@@ -62,7 +116,8 @@ const PayPage: FC<PayPageProps> = ({ className = "" }) => {
               <div className="flex flex-col">
                 <span className="text-sm text-neutral-400">Date</span>
                 <span className="mt-1.5 text-lg font-semibold">
-                  Aug 12 - 16, 2021
+                  {booking.tour.tourDetails[0].startDate} -{' '}
+                  {booking.tour.tourDetails[0].endDate}
                 </span>
               </div>
             </div>
@@ -84,7 +139,11 @@ const PayPage: FC<PayPageProps> = ({ className = "" }) => {
 
               <div className="flex flex-col">
                 <span className="text-sm text-neutral-400">Guests</span>
-                <span className="mt-1.5 text-lg font-semibold">3 Guests</span>
+                <span className="mt-1.5 text-lg font-semibold">
+                  {(Number(booking?.numAdults ?? 0) +
+                    Number(booking?.numChildren ?? 0) +
+                    Number(booking?.numInfants ?? 0)).toString()}
+                </span>
               </div>
             </div>
           </div>
@@ -95,27 +154,27 @@ const PayPage: FC<PayPageProps> = ({ className = "" }) => {
           <h3 className="text-2xl font-semibold">Booking detail</h3>
           <div className="flex flex-col space-y-4">
             <div className="flex text-neutral-6000 dark:text-neutral-300">
-              <span className="flex-1">Booking code</span>
+              <span className="flex-1">Payment code</span>
               <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                #222-333-111
+                {booking.payments[0].paymentCode}
               </span>
             </div>
             <div className="flex text-neutral-6000 dark:text-neutral-300">
               <span className="flex-1">Date</span>
               <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                12 Aug, 2021
+              {booking.payments[0].paymentDate}
               </span>
             </div>
             <div className="flex text-neutral-6000 dark:text-neutral-300">
               <span className="flex-1">Total</span>
               <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                $199
+                {booking.totalPrice.toString()}
               </span>
             </div>
             <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
               <span className="flex-1">Payment method</span>
               <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                Credit card
+                {booking.payments[0].paymentMethod == 1 ? 'COD' : 'E-Banking'}
               </span>
             </div>
           </div>
@@ -124,8 +183,10 @@ const PayPage: FC<PayPageProps> = ({ className = "" }) => {
           <ButtonPrimary href="/">Explore more stays</ButtonPrimary>
         </div>
       </div>
-    );
-  };
+    ) : (
+      ''
+    )
+  }
 
   return (
     <div className={`nc-PayPage ${className}`} data-nc-id="PayPage">
@@ -133,7 +194,7 @@ const PayPage: FC<PayPageProps> = ({ className = "" }) => {
         <div className="max-w-4xl mx-auto">{renderContent()}</div>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default PayPage;
+export default PayPage
