@@ -7,8 +7,8 @@ export type tourDetailType = {
   id: Number;
   tourId: Number;
   tour: tourType[];
-  startDate: Date;
-  endDate: Date;
+  startDate: String;
+  endDate: String;
   departure: String;
   destinationId: Number;
   expiredDate: Date;

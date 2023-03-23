@@ -130,6 +130,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
 
   const handleCloseModal = () => setIsOpen(false)
 
+  
   const { id } = useParams()
 
   const [destination, setDestinations] = useState<destinationsType>()
@@ -142,12 +143,21 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         .data.data
       const tourguide = await (await tourGuideApi.getAll({ tourId: id })).data
         .data
+        setSelectedDate({
+          startDate: moment(tours?.tourDetails[0].startDate),
+          endDate: moment(tours?.tourDetails[0].endDate),
+        });
       setTour(tours)
       setDestinations(destinations)
       setGuide(tourguide)
       //console.log("tour", tour);
     })()
   }, [])
+
+  // setSelectedDate({
+  //   startDate: moment(tours?.tourDetails[0].startDate),
+  //   endDate: moment(tours?.tourDetails[0].endDate),
+  // });
 
   const renderSection1 = (e: tourType) => {
     return (
@@ -659,10 +669,11 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         {/* PRICE */}
         <div className="flex justify-between">
           <span className="text-3xl font-semibold">
-            {`${e.tourPrices ? e.tourPrices.map((x) => x.priceChildren) : ''}`}
+            {/* {`${e.tourPrices ? e.tourPrices.map((x) => x.priceChildren) : ''}`}
             <span className="ml-1 text-base font-normal text-neutral-500 dark:text-neutral-400">
               /night
-            </span>
+            </span> */}
+            {e.tourName}
           </span>
           <StartRating />
         </div>
@@ -677,8 +688,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
             anchorDirection={'right'}
             className="nc-ListingStayDetailPage__stayDatesRangeInput flex-1"
           />
-          <div className="w-full border-b border-neutral-200 dark:border-neutral-700"></div>
-          <GuestsInput
+          {/* <div className="w-full border-b border-neutral-200 dark:border-neutral-700"></div> */}
+          {/* <GuestsInput
             className="nc-ListingStayDetailPage__guestsInput flex-1"
             fieldClassName="p-3"
             defaultValue={{
@@ -687,28 +698,32 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
               guestInfants: 0,
             }}
             hasButtonSubmit={false}
-          />
+          /> */}
         </form>
 
         {/* SUM */}
         <div className="flex flex-col space-y-4">
           <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
-            <span>$119 x 3 night</span>
-            <span>$357</span>
+            <span>Aldult</span>
+            <span>${e.tourPrices[0].priceAdults.toString()}</span>
           </div>
           <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
-            <span>Service charge</span>
-            <span>$0</span>
+            <span>Children</span>
+            <span>${e.tourPrices[0].priceChildren.toString()}</span>
+          </div>
+          <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
+            <span>Infants</span>
+            <span>${e.tourPrices[0].priceInfants.toString()}</span>
           </div>
           <div className="border-b border-neutral-200 dark:border-neutral-700"></div>
-          <div className="flex justify-between font-semibold">
+          {/* <div className="flex justify-between font-semibold">
             <span>Total</span>
             <span>$199</span>
-          </div>
+          </div> */}
         </div>
 
         {/* SUBMIT */}
-        <ButtonPrimary href={'/checkout'}>Reserve</ButtonPrimary>
+        <ButtonPrimary href={`/checkout/${e.id}`}>Reserve</ButtonPrimary>
       </div>
     )
   }
