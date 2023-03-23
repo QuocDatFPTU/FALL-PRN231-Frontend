@@ -49,7 +49,7 @@ const PayPage: FC<PayPageProps> = ({ className = "" }) => {
     if (!file) {
       alert("Please upload an image first!");
     }
-    const storageRef = ref(storage, `/files/${file}/${new Date().getTime()}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
+    const storageRef = ref(storage, `/files/${new Date().getTime()}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
     const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(
       "state_changed",
