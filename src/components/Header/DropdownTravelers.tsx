@@ -20,24 +20,24 @@ const solutions: SolutionItem[] = [
     icon: IconFour,
     active: true,
   },
-  {
-    name: "Flights",
-    description: "Flights description",
-    href: "/listing-flights",
-    icon: IconTwo,
-  },
-  {
-    name: "Things to do",
-    description: "Tour and experiences",
-    href: "/listing-experiences",
-    icon: IconOne,
-  },
-  {
-    name: "Cars",
-    description: "Car rental description",
-    href: "/listing-car",
-    icon: IconThree,
-  },
+  // {
+  //   name: "Flights",
+  //   description: "Flights description",
+  //   href: "/listing-flights",
+  //   icon: IconTwo,
+  // },
+  // {
+  //   name: "Things to do",
+  //   description: "Tour and experiences",
+  //   href: "/listing-experiences",
+  //   icon: IconOne,
+  // },
+  // {
+  //   name: "Cars",
+  //   description: "Car rental description",
+  //   href: "/listing-car",
+  //   icon: IconThree,
+  // },
 ];
 
 export default function DropdownTravelers() {

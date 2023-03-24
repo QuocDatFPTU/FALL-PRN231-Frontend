@@ -1,4 +1,4 @@
-import destinationApi from 'api/destinationApi'
+import destinationApi, { destinationsType } from 'api/destinationApi'
 import tourApi, { tourType } from 'api/tourApi'
 import BgGlassmorphism from 'components/BgGlassmorphism/BgGlassmorphism'
 import Heading2 from 'components/Heading/Heading2'
@@ -10,8 +10,6 @@ import { FC, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
 import Pagination from 'shared/Pagination/Pagination'
-import TabFilters from './TabFilters'
-import { destinationsType } from 'api/destinationApi';
 
 export interface ListingStayPageProps {
   className?: string
@@ -46,9 +44,7 @@ const ListingTourPage: FC<ListingStayPageProps> = ({ className = '' }) => {
               href: `/listing-stay-detail/${e.id}`,
               listingCategoryId: 17,
               title: e.tourName,
-              galleryImgs: destinations[0].destinationImages.map(
-                (b: any) => b.image,
-              ),
+              galleryImgs: e.tourDetails[0].destination.destinationImages.map((x) => x.image),
               commentCount: 70,
               viewCount: 602,
               like: false,
@@ -57,7 +53,7 @@ const ListingTourPage: FC<ListingStayPageProps> = ({ className = '' }) => {
               reviewCount: 28,
               //price: e.cost.toString(),
               maxGuests: e.tourCapacity,
-              // bedrooms: e.available,
+              bedrooms: e.tourCapacity,
               bathrooms: 3,
               saleOff: '-10% today',
               isAds: null,
@@ -105,9 +101,9 @@ const ListingTourPage: FC<ListingStayPageProps> = ({ className = '' }) => {
         >
           <Heading2 />
 
-          <div className="mb-8 lg:mb-11">
+          {/* <div className="mb-8 lg:mb-11">
             <TabFilters />
-          </div>
+          </div> */}
           <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {card?.map((stay: any) => (
               <StayCard key={stay.id} data={stay} />

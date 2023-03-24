@@ -101,11 +101,11 @@ const StayCard: FC<StayCardProps> = ({
           <span className="text-base font-semibold">
             {price}
             {` `}
-            {size === "default" && (
+            {/* {size === "default" && (
               <span className="text-sm text-neutral-500 dark:text-neutral-400 font-normal">
                 /night
               </span>
-            )}
+            )} */}
           </span>
           {!!reviewStart && (
             <StartRating reviewCount={reviewCount} point={reviewStart} />

@@ -60,7 +60,7 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
           Login
         </h2>
         <div className="max-w-md mx-auto space-y-6">
-          <div className="grid gap-3">
+          <div className="grid gap-3" style={{cursor: 'pointer'}}>
             <a
               onClick={login}
               className="nc-will-change-transform flex w-full rounded-lg bg-primary-50 dark:bg-neutral-800 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"

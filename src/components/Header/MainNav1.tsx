@@ -37,7 +37,7 @@ const MainNav1: FC<MainNav1Props> = ({ className = "" }) => {
                 Log out
               </ButtonPrimary>
             ) : (
-              <ButtonPrimary href="/login">Sign up</ButtonPrimary>
+              <ButtonPrimary href="/login">Log In</ButtonPrimary>
             )}
           </div>
           <div className="flex xl:hidden items-center">

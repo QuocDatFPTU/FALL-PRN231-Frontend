@@ -116,11 +116,11 @@ const GuestsInput: FC<GuestsInputProps> = ({
             </div>
 
             {/* BUTTON SUBMIT OF FORM */}
-            {hasButtonSubmit && (
+            {/* {hasButtonSubmit && (
               <div className="pr-2 xl:pr-4">
                 <ButtonSubmit href={buttonSubmitHref} />
               </div>
-            )}
+            )} */}
           </div>
           <Transition
             as={Fragment}

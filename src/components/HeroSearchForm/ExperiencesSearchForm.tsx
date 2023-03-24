@@ -58,12 +58,12 @@ const ExperiencesSearchForm: FC<ExperiencesSearchFormProps> = ({
           className="flex-1"
         />
 
-        <GuestsInput
+        {/* <GuestsInput
           defaultValue={guestValue}
           onChange={(data) => setGuestValue(data)}
           className="flex-[1.5]"
           buttonSubmitHref="/listing-experiences"
-        />
+        /> */}
       </form>
     );
   };

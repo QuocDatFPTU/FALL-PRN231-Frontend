@@ -118,7 +118,7 @@ const RentalCarSearchForm: FC<RentalCarSearchFormProps> = ({
                 />
               )}
             </div>
-            <RentalCarDatesRangeInput
+            {/* <RentalCarDatesRangeInput
               defaultDateValue={dateRangeValue}
               defaultTimeValue={timeRangeValue}
               defaultFocus={
@@ -133,7 +133,7 @@ const RentalCarSearchForm: FC<RentalCarSearchFormProps> = ({
                 dropOffLocationType === "different" ? "flex-1" : "flex-[1.3]"
               }`}
               buttonSubmitHref="/listing-car"
-            />
+            /> */}
           </div>
         </form>
       </div>

@@ -1,20 +1,24 @@
-import React, { FC, Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
+import destinationApi, { destinationsType } from 'api/destinationApi'
+import tourApi, { tourType } from 'api/tourApi'
+import { tourGuideType } from 'api/tourGuideApi'
 import LocationMarker from 'components/AnyReactComponent/LocationMarker'
 import CommentListing from 'components/CommentListing/CommentListing'
 import FiveStartIconForRate from 'components/FiveStartIconForRate/FiveStartIconForRate'
-import GuestsInput from 'components/HeroSearchForm/GuestsInput'
+import StayDatesRangeInput from 'components/HeroSearchForm/StayDatesRangeInput'
 import { DateRage } from 'components/HeroSearchForm/StaySearchForm'
 import StartRating from 'components/StartRating/StartRating'
 import GoogleMapReact from 'google-map-react'
 import useWindowSize from 'hooks/useWindowResize'
 import moment from 'moment'
+import { FC, Fragment, useEffect, useState } from 'react'
 import {
   DayPickerRangeController,
   FocusedInputShape,
-  isInclusivelyAfterDay,
+  isInclusivelyAfterDay
 } from 'react-dates'
+import { useParams } from 'react-router-dom'
 import Avatar from 'shared/Avatar/Avatar'
 import Badge from 'shared/Badge/Badge'
 import ButtonCircle from 'shared/Button/ButtonCircle'
@@ -23,19 +27,9 @@ import ButtonSecondary from 'shared/Button/ButtonSecondary'
 import ButtonClose from 'shared/ButtonClose/ButtonClose'
 import Input from 'shared/Input/Input'
 import NcImage from 'shared/NcImage/NcImage'
+import tourGuideApi from '../../api/tourGuideApi'
 import LikeSaveBtns from './LikeSaveBtns'
 import ModalPhotos from './ModalPhotos'
-import BackgroundSection from 'components/BackgroundSection/BackgroundSection'
-import SectionSliderNewCategories from 'components/SectionSliderNewCategories/SectionSliderNewCategories'
-import SectionSubscribe2 from 'components/SectionSubscribe2/SectionSubscribe2'
-import StayDatesRangeInput from 'components/HeroSearchForm/StayDatesRangeInput'
-import MobileFooterSticky from './MobileFooterSticky'
-import { useParams } from 'react-router-dom'
-import destinationApi, { destinationsType } from 'api/destinationApi'
-import tourApi, { tourType } from 'api/tourApi'
-import { TaxonomyType } from 'data/types'
-import { tourGuideType } from 'api/tourGuideApi'
-import tourGuideApi from '../../api/tourGuideApi'
 
 export interface ListingStayDetailPageProps {
   className?: string
@@ -354,49 +348,49 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
     )
   }
 
-  const renderSection4 = () => {
-    return (
-      <div className="listingSection__wrap">
-        {/* HEADING */}
-        <div>
-          <h2 className="text-2xl font-semibold">Tour Prices </h2>
-          <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
-            Prices may increase on weekends or holidays
-          </span>
-        </div>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
-        {/* CONTENT */}
-        <div className="flow-root">
-          <div className="text-sm sm:text-base text-neutral-6000 dark:text-neutral-300 -mb-4">
-            <div className="p-4 bg-neutral-100 dark:bg-neutral-800 flex justify-between items-center space-x-4 rounded-lg">
-              <span>Monday - Thursday</span>
-              <span>$199</span>
-            </div>
-            <div className="p-4  flex justify-between items-center space-x-4 rounded-lg">
-              <span>Monday - Thursday</span>
-              <span>$199</span>
-            </div>
-            <div className="p-4 bg-neutral-100 dark:bg-neutral-800 flex justify-between items-center space-x-4 rounded-lg">
-              <span>Friday - Sunday</span>
-              <span>$219</span>
-            </div>
-            <div className="p-4 flex justify-between items-center space-x-4 rounded-lg">
-              <span>Rent by month</span>
-              <span>-8.34 %</span>
-            </div>
-            <div className="p-4 bg-neutral-100 dark:bg-neutral-800 flex justify-between items-center space-x-4 rounded-lg">
-              <span>Minimum number of nights</span>
-              <span>1 night</span>
-            </div>
-            <div className="p-4 flex justify-between items-center space-x-4 rounded-lg">
-              <span>Max number of nights</span>
-              <span>90 nights</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  // const renderSection4 = () => {
+  //   return (
+  //     <div className="listingSection__wrap">
+  //       {/* HEADING */}
+  //       <div>
+  //         <h2 className="text-2xl font-semibold">Tour Prices </h2>
+  //         <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
+  //           Prices may increase on weekends or holidays
+  //         </span>
+  //       </div>
+  //       <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+  //       {/* CONTENT */}
+  //       <div className="flow-root">
+  //         <div className="text-sm sm:text-base text-neutral-6000 dark:text-neutral-300 -mb-4">
+  //           <div className="p-4 bg-neutral-100 dark:bg-neutral-800 flex justify-between items-center space-x-4 rounded-lg">
+  //             <span>Monday - Thursday</span>
+  //             <span>$199</span>
+  //           </div>
+  //           <div className="p-4  flex justify-between items-center space-x-4 rounded-lg">
+  //             <span>Monday - Thursday</span>
+  //             <span>$199</span>
+  //           </div>
+  //           <div className="p-4 bg-neutral-100 dark:bg-neutral-800 flex justify-between items-center space-x-4 rounded-lg">
+  //             <span>Friday - Sunday</span>
+  //             <span>$219</span>
+  //           </div>
+  //           <div className="p-4 flex justify-between items-center space-x-4 rounded-lg">
+  //             <span>Rent by month</span>
+  //             <span>-8.34 %</span>
+  //           </div>
+  //           <div className="p-4 bg-neutral-100 dark:bg-neutral-800 flex justify-between items-center space-x-4 rounded-lg">
+  //             <span>Minimum number of nights</span>
+  //             <span>1 night</span>
+  //           </div>
+  //           <div className="p-4 flex justify-between items-center space-x-4 rounded-lg">
+  //             <span>Max number of nights</span>
+  //             <span>90 nights</span>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   )
+  // }
 
   const renderSectionCheckIndate = () => {
     return (
@@ -574,40 +568,40 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
     )
   }
 
-  const renderSection7 = (e: tourType) => {
-    return (
-      <div className="listingSection__wrap">
-        {/* HEADING */}
-        <div>
-          <h2 className="text-2xl font-semibold">Destination</h2>
-          <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
-            {e.tourName}, {e.tourDetails[0].destination.name},{' '}
-            {`miền ${e.tourDetails[0].destination.region}`}
-          </span>
-        </div>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+  // const renderSection7 = (e: tourType) => {
+  //   return (
+  //     <div className="listingSection__wrap">
+  //       {/* HEADING */}
+  //       <div>
+  //         <h2 className="text-2xl font-semibold">Destination</h2>
+  //         <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
+  //           {e.tourName}, {e.tourDetails[0].destination.name},{' '}
+  //           {`miền ${e.tourDetails[0].destination.region}`}
+  //         </span>
+  //       </div>
+  //       <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
 
-        {/* MAP */}
-        <div className="aspect-w-5 aspect-h-5 sm:aspect-h-3">
-          <div className="rounded-xl overflow-hidden">
-            <GoogleMapReact
-              bootstrapURLKeys={{
-                key: 'AIzaSyAGVJfZMAKYfZ71nzL_v5i3LjTTWnCYwTY',
-              }}
-              yesIWantToUseGoogleMapApiInternals
-              defaultZoom={15}
-              defaultCenter={{
-                lat: 55.9607277,
-                lng: 36.2172614,
-              }}
-            >
-              <LocationMarker lat={55.9607277} lng={36.2172614} />
-            </GoogleMapReact>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  //       {/* MAP */}
+  //       <div className="aspect-w-5 aspect-h-5 sm:aspect-h-3">
+  //         <div className="rounded-xl overflow-hidden">
+  //           <GoogleMapReact
+  //             bootstrapURLKeys={{
+  //               key: 'AIzaSyAGVJfZMAKYfZ71nzL_v5i3LjTTWnCYwTY',
+  //             }}
+  //             yesIWantToUseGoogleMapApiInternals
+  //             defaultZoom={15}
+  //             defaultCenter={{
+  //               lat: 55.9607277,
+  //               lng: 36.2172614,
+  //             }}
+  //           >
+  //             <LocationMarker lat={55.9607277} lng={36.2172614} />
+  //           </GoogleMapReact>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   )
+  // }
 
   const renderSection8 = () => {
     return (
@@ -815,11 +809,11 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           {tour ? renderSection1(tour) : ''}
           {tour ? renderSection2(tour) : ''}
           {renderSection3()}
-          {renderSection4()}
+          {/* {renderSection4()} */}
           {renderSectionCheckIndate()}
           {tour ? renderSection5(tour) : ''}
           {renderSection6()}
-          {tour ? renderSection7(tour) : ''}
+          {/* {tour ? renderSection7(tour) : ''} */}
           {renderSection8()}
         </div>
 
@@ -830,12 +824,12 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
       </main>
 
       {/* STICKY FOOTER MOBILE */}
-      {!isPreviewMode && <MobileFooterSticky />}
+      {/* {!isPreviewMode && <MobileFooterSticky />} */}
 
       {/* OTHER SECTION */}
       {!isPreviewMode && (
-        <div className="container py-24 lg:py-32">
-          {/* SECTION 1 */}
+        <div className="container py-14 lg:py-12">
+          {/* SECTION 1
           <div className="relative py-16">
             <BackgroundSection />
             <SectionSliderNewCategories
@@ -848,8 +842,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
             />
           </div>
 
-          {/* SECTION */}
-          <SectionSubscribe2 className="pt-24 lg:pt-32" />
+          SECTION
+          <SectionSubscribe2 className="pt-24 lg:pt-32" /> */}
         </div>
       )}
     </div>

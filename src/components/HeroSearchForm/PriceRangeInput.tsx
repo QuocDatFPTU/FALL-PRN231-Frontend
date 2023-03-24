@@ -82,9 +82,9 @@ const PriceRangeInput: FC<PriceRangeInputProps> = ({
             </Popover.Button>
 
             {/* BUTTON SUBMIT OF FORM */}
-            <div className="pr-2 xl:pr-4">
+            {/* <div className="pr-2 xl:pr-4">
               <ButtonSubmit href="/listing-real-estate" />
-            </div>
+            </div> */}
           </div>
 
           <Transition

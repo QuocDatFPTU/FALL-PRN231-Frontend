@@ -23,16 +23,16 @@ const NAV: NavItem[] = [
     link: "/",
     icon: MagnifyingGlassIcon,
   },
-  {
-    name: "Wishlists",
-    link: "/account-savelists",
-    icon: HeartIcon,
-  },
-  {
-    name: "Log in",
-    link: "/account",
-    icon: UserCircleIcon,
-  },
+  // {
+  //   name: "Wishlists",
+  //   link: "/account-savelists",
+  //   icon: HeartIcon,
+  // },
+  // {
+  //   name: "Log in",
+  //   link: "/account",
+  //   icon: UserCircleIcon,
+  // },
   {
     name: "Menu",
     icon: MenuBar,

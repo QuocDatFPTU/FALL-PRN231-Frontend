@@ -265,11 +265,11 @@ const RentalCarDatesRangeInput: FC<RentalCarDatesRangeInputProps> = ({
             </span>
           </div>
         </div>
-        {hasButtonSubmit && (
+        {/* {hasButtonSubmit && (
           <div className="pr-2 xl:pr-4 relative z-20">
             <ButtonSubmit href={buttonSubmitHref} />
           </div>
-        )}
+        )} */}
       </div>
     );
   };

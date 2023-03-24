@@ -239,7 +239,7 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ haveDefaultValue }) => {
                 autoFocus={fieldFocused === "dropOffInput"}
               />
             </div>
-            <RentalCarDatesRangeInput
+            {/* <RentalCarDatesRangeInput
               defaultDateValue={dateRangeValue}
               defaultTimeValue={timeRangeValue}
               defaultFocus={
@@ -252,7 +252,7 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({ haveDefaultValue }) => {
               }}
               className="flex-1"
               buttonSubmitHref="/listing-flights"
-            />
+            /> */}
           </div>
         </form>
       </div>
