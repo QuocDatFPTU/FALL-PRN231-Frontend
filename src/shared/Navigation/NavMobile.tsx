@@ -4,12 +4,13 @@ import Logo from "shared/Logo/Logo";
 import { Disclosure } from "@headlessui/react";
 import { NavLink } from "react-router-dom";
 import { NavItemType } from "./NavigationItem";
-import { NAVIGATION_DEMO } from "data/navigation";
+
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import SocialsList from "shared/SocialsList/SocialsList";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import SwitchDarkMode from "shared/SwitchDarkMode/SwitchDarkMode";
 import LangDropdown from "components/Header/LangDropdown";
+import { NAVIGATION_DEMO } from 'shared/Navigation/Navigation';
 
 export interface NavMobileProps {
   data?: NavItemType[];

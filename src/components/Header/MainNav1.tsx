@@ -15,6 +15,17 @@ export interface MainNav1Props {
 
 const MainNav1: FC<MainNav1Props> = ({ className = "" }) => {
   const user = useContext(AuthContext);
+
+  const handleLogout = () => {
+    auth.signOut()
+      .then(() => {
+        // Redirect to Homepage after logout
+        window.location.replace("/");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
   return (
     <div className={`nc-MainNav1 relative z-10 ${className}`}>
       <div className="px-4 lg:container py-4 lg:py-5 relative flex justify-between items-center">
@@ -33,7 +44,7 @@ const MainNav1: FC<MainNav1Props> = ({ className = "" }) => {
             <SearchDropdown />
             <div className="px-1" />
             {user ? (
-              <ButtonPrimary onClick={() => auth.signOut()}>
+              <ButtonPrimary onClick={handleLogout}>
                 Log out
               </ButtonPrimary>
             ) : (

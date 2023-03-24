@@ -1,11 +1,11 @@
-import React, { FC } from "react";
+import BtnLikeIcon from "components/BtnLikeIcon/BtnLikeIcon";
 import GallerySlider from "components/GallerySlider/GallerySlider";
+import SaleOffBadge from "components/SaleOffBadge/SaleOffBadge";
+import StartRating from "components/StartRating/StartRating";
 import { DEMO_STAY_LISTINGS } from "data/listings";
 import { StayDataType } from "data/types";
-import StartRating from "components/StartRating/StartRating";
+import { FC } from "react";
 import { Link } from "react-router-dom";
-import BtnLikeIcon from "components/BtnLikeIcon/BtnLikeIcon";
-import SaleOffBadge from "components/SaleOffBadge/SaleOffBadge";
 import Badge from "shared/Badge/Badge";
 
 export interface StayCardProps {
@@ -23,7 +23,7 @@ const StayCard: FC<StayCardProps> = ({
 }) => {
   const {
     galleryImgs,
-    listingCategory,
+    //listingCategory,
     address,
     title,
     bedrooms,

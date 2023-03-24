@@ -3,12 +3,8 @@ import tourApi, { tourType } from 'api/tourApi'
 import BgGlassmorphism from 'components/BgGlassmorphism/BgGlassmorphism'
 import Heading2 from 'components/Heading/Heading2'
 import StayCard from 'components/StayCard/StayCard'
-import { DEMO_AUTHORS } from 'data/authors'
-import { DEMO_STAY_CATEGORIES } from 'data/taxonomies'
-import { StayDataType } from 'data/types'
 import { FC, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { useParams } from 'react-router-dom'
 import Pagination from 'shared/Pagination/Pagination'
 
 export interface ListingStayPageProps {
@@ -16,72 +12,74 @@ export interface ListingStayPageProps {
 }
 
 const ListingTourPage: FC<ListingStayPageProps> = ({ className = '' }) => {
-  const { id } = useParams()
+  //const { id } = useParams()
 
   const [card, setCard] = useState([])
-  const [tour, setTour] = useState<tourType>();
-  const [destination, setDestination] = useState<destinationsType>();
+  // const [tour, setTour] = useState<tourType>();
+  // const [destination, setDestination] = useState<destinationsType>();
 
   useEffect(() => {
     ;(async () => {
-      const destinations = await (await destinationApi.getAll()).data
-        .data
-      const tours = await (await tourApi.getAll()).data.data
-      // console.log(tours);
-      // console.log(destinations);
-      // console.log("imgae",destinations.destinationImages.map(
-      //   (b: any) => b.image,
-      // ));
-      
-
-      setCard(
-        tours
-          .map((e: tourType) => {
-            return {
-              id: e.id,
-              authorId: 10,
-              date: 'May 20, 2021',
-              href: `/listing-stay-detail/${e.id}`,
-              listingCategoryId: 17,
-              title: e.tourName,
-              galleryImgs: e.tourDetails[0].destination.destinationImages.map((x) => x.image),
-              commentCount: 70,
-              viewCount: 602,
-              like: false,
-              address: e.tourDetails.map((x) => x.destination.name),
-              reviewStart: 4.8,
-              reviewCount: 28,
-              //price: e.cost.toString(),
-              maxGuests: e.tourCapacity,
-              bedrooms: e.tourCapacity,
-              bathrooms: 3,
-              saleOff: '-10% today',
-              isAds: null,
-              map: { lat: 55.2094559, lng: 61.5594641 },
-            }
-          })
-          .map(
-            (post: any, index: any): StayDataType => {
-              //  ##########  GET CATEGORY BY CAT ID ######## //
-              const category = DEMO_STAY_CATEGORIES.filter(
-                (taxonomy) => taxonomy.id === post.listingCategoryId,
-              )[0]
-
-              return {
-                ...post,
-                id: `stayListing_${index}_`,
-                saleOff: !index ? '-20% today' : post.saleOff,
-                isAds: !index ? true : post.isAds,
-                author: DEMO_AUTHORS.filter(
-                  (user) => user.id === post.authorId,
-                )[0],
-                listingCategory: category,
-              }
-            },
-          ),
-      )
+      try {
+        const [destinationsResponse, toursResponse] = await Promise.all([
+          destinationApi.getAll(),
+          tourApi.getAll(),
+        ]);
+  
+        const destinations = destinationsResponse.data.data;
+        const tours = toursResponse.data.data;
+  
+        const newCard = tours.map((e: tourType) => {
+          const destination = destinations.find((d: destinationsType) => d.id === e.tourDetails[0].destination.id);
+          return {
+            id: e.id,
+            authorId: 10,
+            date: 'May 20, 2021',
+            href: `/listing-stay-detail/${e.id}`,
+            listingCategoryId: 17,
+            title: e.tourName,
+            galleryImgs: e.tourDetails[0].destination.destinationImages.map((x) => x.image),
+            commentCount: 70,
+            viewCount: 602,
+            like: false,
+            address: e.tourDetails.map((x) => x.destination.name),
+            reviewStart: 4.8,
+            reviewCount: 28,
+            //price: e.cost.toString(),
+            maxGuests: e.tourCapacity,
+            bedrooms: e.tourCapacity,
+            bathrooms: 3,
+            saleOff: '-10% today',
+            isAds: null,
+            map: { lat: 55.2094559, lng: 61.5594641 },
+            destination,
+          }
+        })
+        // .map((post: any, index: any): StayDataType => {
+        //   //  ##########  GET CATEGORY BY CAT ID ######## //
+        //   const category = DEMO_STAY_CATEGORIES.filter(
+        //     (taxonomy) => taxonomy.id === post.listingCategoryId,
+        //   )[0]
+  
+        //   return {
+        //     ...post,
+        //     id: `stayListing_${index}_`,
+        //     saleOff: !index ? '-20% today' : post.saleOff,
+        //     isAds: !index ? true : post.isAds,
+        //     author: DEMO_AUTHORS.filter(
+        //       (user) => user.id === post.authorId,
+        //     )[0],
+        //     listingCategory: category,
+        //   }
+        // });
+  
+        setCard(newCard);
+      } catch (error) {
+        // handle error
+      }
     })()
   }, [])
+  
 
   return (
     <div

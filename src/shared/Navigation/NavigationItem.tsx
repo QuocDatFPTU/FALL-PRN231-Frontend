@@ -1,7 +1,6 @@
 import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import { AuthContext } from "context/AuthContext";
-import React, { FC, Fragment, useContext, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import NcImage from "shared/NcImage/NcImage";
 
@@ -21,6 +20,7 @@ export interface NavItemType {
   children?: NavItemType[];
   megaMenu?: MegamenuItem[];
   type?: "dropdown" | "megaMenu" | "none";
+  hidden?: boolean;
 }
 
 export interface NavigationItemProps {
@@ -32,7 +32,7 @@ type NavigationItemWithRouterProps = NavigationItemProps;
 const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
   const [menuCurrentHovers, setMenuCurrentHovers] = useState<string[]>([]);
 
-  const user = useContext(AuthContext);
+  //const user = useContext(AuthContext);
 
   // CLOSE ALL MENU OPENING WHEN CHANGE HISTORY
   const locationPathName = useLocation().pathname;
