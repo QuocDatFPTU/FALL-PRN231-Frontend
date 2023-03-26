@@ -61,7 +61,7 @@ export const pages: Page[] = [
   { path: "/pay-done/:id", component: PayPage },
   //
   { path: "/author", component: AuthorPage },
-  { path: "/account", component: AccountPage },
+  { path: "/account/:id", component: AccountPage },
   // { path: "/account-password", component: AccountPass },
   // { path: "/account-savelists", component: AccountSavelists },
   // { path: "/account-billing", component: AccountBilling },

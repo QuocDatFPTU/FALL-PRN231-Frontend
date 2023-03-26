@@ -38,7 +38,7 @@ const ListingTourPage: FC<ListingStayPageProps> = ({ className = '' }) => {
             href: `/listing-stay-detail/${e.id}`,
             listingCategoryId: 17,
             title: e.tourName,
-            galleryImgs: e.tourDetails[0].destination.destinationImages.map((x) => x.image),
+            galleryImgs: e.tourDetails[0].destination.destinationImages.map((x) => x.image).slice(0, 3),
             commentCount: 70,
             viewCount: 602,
             like: false,
@@ -55,24 +55,6 @@ const ListingTourPage: FC<ListingStayPageProps> = ({ className = '' }) => {
             destination,
           }
         })
-        // .map((post: any, index: any): StayDataType => {
-        //   //  ##########  GET CATEGORY BY CAT ID ######## //
-        //   const category = DEMO_STAY_CATEGORIES.filter(
-        //     (taxonomy) => taxonomy.id === post.listingCategoryId,
-        //   )[0]
-  
-        //   return {
-        //     ...post,
-        //     id: `stayListing_${index}_`,
-        //     saleOff: !index ? '-20% today' : post.saleOff,
-        //     isAds: !index ? true : post.isAds,
-        //     author: DEMO_AUTHORS.filter(
-        //       (user) => user.id === post.authorId,
-        //     )[0],
-        //     listingCategory: category,
-        //   }
-        // });
-  
         setCard(newCard);
       } catch (error) {
         // handle error

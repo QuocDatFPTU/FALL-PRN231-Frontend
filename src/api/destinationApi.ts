@@ -17,27 +17,27 @@ export type destinationImagesType = {
 
 const destinationApi = {
   getAll(params?: any) {
-    const url = "/Destinations";
+    const url = "/destinations";
     return axiosClient.get(url, { params });
   },
 
   getById(id: Number) {
-    const url = `/Destinations/${id}`;
+    const url = `/destinations/${id}`;
     return axiosClient.get(url);
   },
 
   create(data: destinationsType) {
-    const url = "/Destinations";
+    const url = "/destinations";
     return axiosClient.post(url, data);
   },
 
   update(data: destinationsType) {
-    const url = "/Destinations";
+    const url = "/destinations";
     return axiosClient.put(url, data);
   },
 
   delete(id: Number) {
-    const url = `/Destinations/${id}`;
+    const url = `/destinations/${id}`;
     return axiosClient.delete(url);
   },
 };

@@ -30,37 +30,37 @@ export type tourDetailType = {
 
 const tourDetaisApi = {
   getAll(params?: any) {
-    const url = "/TourDetails";
+    const url = "/tourguides";
     return axiosClient.get(url, { params });
   },
 
   getByName(name: string) {
-    const url = `/TourDetails/${name}`;
+    const url = `/tourguides/${name}`;
     return axiosClient.get(url);
   },
 
   getById(id: Number) {
-    const url = `/TourDetails/${id}`;
+    const url = `/tourguides/${id}`;
     return axiosClient.get(url);
   },
 
   getByPlaceId(params: any) {
-    const url = `/TourDetails/getToutByPlaceId`;
+    const url = `/tourguides/getToutByPlaceId`;
     return axiosClient.get(url, { params });
   },
 
   create(data: tourDetailType) {
-    const url = "/TourDetails";
+    const url = "/tourguides";
     return axiosClient.post(url, data);
   },
 
   update(data: tourDetailType) {
-    const url = "/TourDetails";
+    const url = "/tourguides";
     return axiosClient.put(url, data);
   },
 
   delete(id: Number) {
-    const url = `/TourDetails/${id}`;
+    const url = `/tourguides/${id}`;
     return axiosClient.delete(url);
   },
 };

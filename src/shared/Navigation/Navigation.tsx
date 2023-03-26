@@ -29,7 +29,7 @@ export const NAVIGATION_DEMO: NavItemType[] = [
   },
   {
     id: ncNanoId(),
-    href: '/account',
+    href: '/account/:id',
     name: 'Account',
     // type: "megaMenu",
     // megaMenu: megaMenuDemo,

@@ -44,7 +44,7 @@ const paymentApi = {
     return axiosClient.put(url, data);
   },
   putImage(id: Number, image: string) {
-    const url = `/Payments/${id}`;
+    const url = `/payments/${id}`;
     return axiosClient.put(url, image);
   },
 

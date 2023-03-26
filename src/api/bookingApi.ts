@@ -39,37 +39,37 @@ export type createBookingType = {
 
 const bookingApi = {
   getAll(params?: any) {
-    const url = "/Bookings";
+    const url = "/bookings";
     return axiosClient.get(url, { params });
   },
 
   getByName(name: string) {
-    const url = `/Bookings/${name}`;
+    const url = `/bookings/${name}`;
     return axiosClient.get(url);
   },
 
   getById(id: Number) {
-    const url = `/Bookings/${id}`;
+    const url = `/bookings/${id}`;
     return axiosClient.get(url);
   },
 
   // getByPlaceId(params: any) {
-  //   const url = `/Bookings/getToutByPlaceId`;
+  //   const url = `/bookings/getToutByPlaceId`;
   //   return axiosClient.get(url, { params });
   // },
 
   create(data: createBookingType) {
-    const url = "/Bookings";
+    const url = "/bookings";
     return axiosClient.post(url, data);
   },
 
   update(data: bookingType) {
-    const url = "/Bookings";
+    const url = "/bookings";
     return axiosClient.put(url, data);
   },
 
   delete(id: Number) {
-    const url = `/Bookings/${id}`;
+    const url = `/bookings/${id}`;
     return axiosClient.delete(url);
   },
 };
