@@ -7,7 +7,8 @@ export interface CommonLayoutProps {
 const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
   return (
     <div className="nc-CommonLayoutProps bg-neutral-50 dark:bg-neutral-900">
-      <div className="border-b border-neutral-200 dark:border-neutral-700 pt-12 bg-white dark:bg-neutral-800">
+      {/* <div className="border-b border-neutral-200 dark:border-neutral-700 pt-12 bg-white dark:bg-neutral-800"> */}
+      <div>
         {/* <div className="container">
           <div className="flex space-x-8 md:space-x-14 overflow-x-auto hiddenScrollbar">
             <NavLink
