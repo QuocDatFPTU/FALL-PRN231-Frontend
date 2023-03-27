@@ -81,7 +81,7 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
         axiosClient.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${res.data.data.token}`;
-        localStorage.setItem("token", token);
+        localStorage.setItem("token", res.data.data.token);
         navigate("/");
       }
     }
