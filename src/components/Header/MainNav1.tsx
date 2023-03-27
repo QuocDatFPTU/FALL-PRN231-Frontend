@@ -17,8 +17,10 @@ const MainNav1: FC<MainNav1Props> = ({ className = "" }) => {
   const user = useContext(AuthContext);
 
   const handleLogout = () => {
-    auth.signOut()
+    auth
+      .signOut()
       .then(() => {
+        localStorage.removeItem("token");
         // Redirect to Homepage after logout
         window.location.replace("/");
       })
@@ -44,9 +46,7 @@ const MainNav1: FC<MainNav1Props> = ({ className = "" }) => {
             <SearchDropdown />
             <div className="px-1" />
             {user ? (
-              <ButtonPrimary onClick={handleLogout}>
-                Log out
-              </ButtonPrimary>
+              <ButtonPrimary onClick={handleLogout}>Log out</ButtonPrimary>
             ) : (
               <ButtonPrimary href="/login">Log In</ButtonPrimary>
             )}

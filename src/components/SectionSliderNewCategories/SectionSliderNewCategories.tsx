@@ -90,7 +90,6 @@ const SectionSliderNewCategories: FC<SectionSliderNewCategoriesProps> = ({
 }) => {
   const UNIQUE_CLASS =
     "SectionSliderNewCategories__" + uniqueClassName + useNcId();
-  console.log("catergories", categories);
 
   let MY_GLIDEJS = useMemo(() => {
     return new Glide(`.${UNIQUE_CLASS}`, {

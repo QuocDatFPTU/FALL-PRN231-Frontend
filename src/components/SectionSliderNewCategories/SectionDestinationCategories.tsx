@@ -1,39 +1,38 @@
-import Glide from '@glidejs/glide'
-import CardCategory3 from 'components/CardCategory3/CardCategory3'
-import CardCategory4 from 'components/CardCategory4/CardCategory4'
-import CardCategory5 from 'components/CardCategory5/CardCategory5'
-import Heading from 'components/Heading/Heading'
-import { TaxonomyType } from 'data/types'
-import useNcId from 'hooks/useNcId'
-import { FC, useEffect, useMemo } from 'react'
-import NextPrev from 'shared/NextPrev/NextPrev'
+import Glide from "@glidejs/glide";
+import CardCategory3 from "components/CardCategory3/CardCategory3";
+import CardCategory4 from "components/CardCategory4/CardCategory4";
+import CardCategory5 from "components/CardCategory5/CardCategory5";
+import Heading from "components/Heading/Heading";
+import { TaxonomyType } from "data/types";
+import useNcId from "hooks/useNcId";
+import { FC, useEffect, useMemo } from "react";
+import NextPrev from "shared/NextPrev/NextPrev";
 
 export interface SectionSliderNewCategoriesProps {
-  className?: string
-  itemClassName?: string
-  heading?: string
-  subHeading?: string
-  categories?: TaxonomyType[]
-  categoryCardType?: 'card3' | 'card4' | 'card5'
-  itemPerRow?: 4 | 5
-  sliderStyle?: 'style1' | 'style2'
-  uniqueClassName: string
+  className?: string;
+  itemClassName?: string;
+  heading?: string;
+  subHeading?: string;
+  categories?: TaxonomyType[];
+  categoryCardType?: "card3" | "card4" | "card5";
+  itemPerRow?: 4 | 5;
+  sliderStyle?: "style1" | "style2";
+  uniqueClassName: string;
 }
 
 const SectionDestinationCategories: FC<SectionSliderNewCategoriesProps> = ({
-  heading = 'Destinations',
-  subHeading = 'Descriptions for sections',
-  className = '',
-  itemClassName = '',
+  heading = "Destinations",
+  subHeading = "Descriptions for sections",
+  className = "",
+  itemClassName = "",
   categories,
   itemPerRow = 5,
-  categoryCardType = 'card3',
-  sliderStyle = 'style1',
+  categoryCardType = "card3",
+  sliderStyle = "style1",
   uniqueClassName,
 }) => {
   const UNIQUE_CLASS =
-    'SectionSliderNewCategories__' + uniqueClassName + useNcId()
-  console.log('catergories', categories)
+    "SectionSliderNewCategories__" + uniqueClassName + useNcId();
 
   let MY_GLIDEJS = useMemo(() => {
     return new Glide(`.${UNIQUE_CLASS}`, {
@@ -61,27 +60,27 @@ const SectionDestinationCategories: FC<SectionSliderNewCategoriesProps> = ({
           perView: 1.3,
         },
       },
-    })
-  }, [UNIQUE_CLASS])
+    });
+  }, [UNIQUE_CLASS]);
 
   useEffect(() => {
     setTimeout(() => {
-      MY_GLIDEJS.mount()
-    }, 100)
-  }, [MY_GLIDEJS, UNIQUE_CLASS])
+      MY_GLIDEJS.mount();
+    }, 100);
+  }, [MY_GLIDEJS, UNIQUE_CLASS]);
 
   const renderCard = (item: TaxonomyType, index: number) => {
     switch (categoryCardType) {
-      case 'card3':
-        return <CardCategory3 taxonomy={item} />
-      case 'card4':
-        return <CardCategory4 taxonomy={item} />
-      case 'card5':
-        return <CardCategory5 taxonomy={item} />
+      case "card3":
+        return <CardCategory3 taxonomy={item} />;
+      case "card4":
+        return <CardCategory4 taxonomy={item} />;
+      case "card5":
+        return <CardCategory5 taxonomy={item} />;
       default:
-        return <CardCategory3 taxonomy={item} />
+        return <CardCategory3 taxonomy={item} />;
     }
-  }
+  };
 
   return (
     <div className={`nc-SectionSliderNewCategories ${className}`}>
@@ -107,7 +106,7 @@ const SectionDestinationCategories: FC<SectionSliderNewCategoriesProps> = ({
         )} */}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SectionDestinationCategories
+export default SectionDestinationCategories;
