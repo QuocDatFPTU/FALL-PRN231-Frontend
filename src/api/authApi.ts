@@ -6,7 +6,7 @@ type googlePostType = {
 
 const authApi = {
   loginWithGoogle(data: googlePostType) {
-    const url = "/Auth/LoginWithGoogle";
+    const url = "/auth/google-login";
     return axiosClient.post(url, data);
   },
 };

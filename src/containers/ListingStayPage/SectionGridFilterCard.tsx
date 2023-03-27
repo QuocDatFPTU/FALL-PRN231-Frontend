@@ -45,7 +45,7 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
               title: e.tourName,
               galleryImgs: destination.destinationImages.map(
                 (b: any) => b.image
-              ),
+              ).slice(0, 3),
               commentCount: 70,
               viewCount: 602,
               like: false,

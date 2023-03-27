@@ -8,7 +8,7 @@ import Textarea from 'shared/Textarea/Textarea'
 import CommonLayout from './CommonLayout'
 import { Helmet } from 'react-helmet'
 import accountApi, { accountType } from 'api/accountApi'
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom'
 
 export interface AccountPageProps {
   className?: string
@@ -16,14 +16,13 @@ export interface AccountPageProps {
 
 const AccountPage: FC<AccountPageProps> = ({ className = '' }) => {
   const [accounts, setAccounts] = useState<accountType>()
-  const {id} = useParams();
+  const { id } = useParams()
 
   useEffect(() => {
     async function fetchAccounts() {
       const response = await accountApi.getById(Number(id))
       setAccounts(response.data)
-      console.log("accoutn",response.data);
-      
+      console.log('accoutn', response.data)
     }
     fetchAccounts()
   }, [])
@@ -40,7 +39,15 @@ const AccountPage: FC<AccountPageProps> = ({ className = '' }) => {
           <div className="flex flex-col md:flex-row">
             <div className="flex-shrink-0 flex items-start">
               <div className="relative rounded-full overflow-hidden flex">
-                <img style={{ width: '300px', height: '300px', borderRadius: '50%' }} src=''></img>
+                <img
+                  alt=""
+                  style={{
+                    width: '300px',
+                    height: '300px',
+                    borderRadius: '50%',
+                  }}
+                  src={accounts?.avatar.toString()}
+                ></img>
                 {/* <Avatar sizeClass="w-32 h-32" /> */}
                 {/* <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-neutral-50 cursor-pointer">
                   <svg
@@ -70,7 +77,10 @@ const AccountPage: FC<AccountPageProps> = ({ className = '' }) => {
             <div className="flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6">
               <div>
                 <Label>Name</Label>
-                <Input className="mt-1.5" defaultValue={accounts?.firstName.toString()} />
+                <Input
+                  className="mt-1.5"
+                  defaultValue={accounts?.firstName.toString()}
+                />
               </div>
               {/* ---- */}
               <div>

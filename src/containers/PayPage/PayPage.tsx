@@ -156,8 +156,7 @@ const PayPage: FC<PayPageProps> = ({ className = '' }) => {
               <div className="flex flex-col">
                 <span className="text-sm text-neutral-400">Date</span>
                 <span className="mt-1.5 text-lg font-semibold">
-                  {booking.tour.tourDetails[0].startDate} -{' '}
-                  {booking.tour.tourDetails[0].endDate}
+                {`${selectedDate.startDate?.format('DD/MM/YYYY')} - ${selectedDate.endDate?.format('DD/MM/YYYY')}`}
                 </span>
               </div>
             </div>
@@ -204,7 +203,7 @@ const PayPage: FC<PayPageProps> = ({ className = '' }) => {
             <div className="flex text-neutral-6000 dark:text-neutral-300">
               <span className="flex-1">Date</span>
               <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                {booking.payments[0].paymentDate}
+                {moment(booking.payments[0].paymentDate).format('DD-MM-YYYY')}
               </span>
             </div>
             <div className="flex text-neutral-6000 dark:text-neutral-300">

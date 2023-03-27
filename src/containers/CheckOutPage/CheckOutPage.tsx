@@ -10,13 +10,14 @@ import StartRating from 'components/StartRating/StartRating'
 import mastercardPng from 'images/mastercard.svg'
 import visaPng from 'images/vis.png'
 import moment from 'moment'
-import { FC, Fragment, useEffect, useState } from 'react'
+import { FC, Fragment, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import ButtonPrimary from 'shared/Button/ButtonPrimary'
 import NcImage from 'shared/NcImage/NcImage'
 import NcModal from 'shared/NcModal/NcModal'
 import converSelectedDateToString from 'utils/converSelectedDateToString'
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from 'context/AuthContext'
 
 export interface CheckOutPageProps {
   className?: string
@@ -53,7 +54,16 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = '' }) => {
   }, [])
 
   const navigate = useNavigate()
+  const authContext = useContext(AuthContext);
+  const isAuthenticated = authContext?.getIdToken || false;
+
   const bookingCreate = async () => {
+    if (!isAuthenticated) {
+      alert('Login to continues booking');
+      navigate('/login')
+      return;
+    }
+
     const data: createBookingType = {
       tourId: tour?.id ?? 0,
       bookingDate: new Date(),
@@ -138,7 +148,7 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = '' }) => {
 
             <div className="flex justify-between font-semibold">
               <span>Total</span>
-              <span>{totalPrice.toString()}</span>
+              <span>${totalPrice.toString()}</span>
             </div>
           </div>
         )}
