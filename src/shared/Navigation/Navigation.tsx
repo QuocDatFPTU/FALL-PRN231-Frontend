@@ -27,10 +27,17 @@ export const NAVIGATION_DEMO: NavItemType[] = [
     // type: "megaMenu",
     // megaMenu: megaMenuDemo,
   },
+  // {
+  //   id: ncNanoId(),
+  //   href: '/account/:id',
+  //   name: 'Account',
+  //   // type: "megaMenu",
+  //   // megaMenu: megaMenuDemo,
+  // },
   {
     id: ncNanoId(),
-    href: '/account/:id',
-    name: 'Account',
+    href: '/account-savelists',
+    name: 'My Booking',
     // type: "megaMenu",
     // megaMenu: megaMenuDemo,
   },
@@ -41,7 +48,7 @@ function Navigation() {
   const isAuthenticated = authContext?.getIdToken || false;
 
   const updatedNavigation = NAVIGATION_DEMO.map((item) => {
-    if (item.name === 'Account') {
+    if (item.name === 'Account' || item.name === 'My Bill') {
       return { ...item, hidden: !isAuthenticated };
     }
     return item;

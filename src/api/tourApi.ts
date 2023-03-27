@@ -10,7 +10,7 @@ export type tourType = {
   tourCapacity: Number;
   status: Number;
   tourGuideId: Number;
-  tourGuides: tourGuideType[];
+  tourGuide: tourGuideType;
   tourPrices: tourPriceType[];
   tourDetails: tourDetailType[];
 };

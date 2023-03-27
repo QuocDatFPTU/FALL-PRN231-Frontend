@@ -20,6 +20,7 @@ import Footer from "shared/Footer/Footer";
 import ScrollToTop from "./ScrollToTop";
 import { Page } from "./types";
 import ListingDestionationPage from './../containers/ListingStayPage/ListingDestinationPage';
+import AccountSavelists from "containers/AccountPage/AccountSavelists";
 
 export const pages: Page[] = [
   { path: "/", exact: true, component: PageHome },
@@ -63,7 +64,7 @@ export const pages: Page[] = [
   { path: "/author", component: AuthorPage },
   { path: "/account/:id", component: AccountPage },
   // { path: "/account-password", component: AccountPass },
-  // { path: "/account-savelists", component: AccountSavelists },
+  { path: "/account-savelists", component: AccountSavelists },
   // { path: "/account-billing", component: AccountBilling },
   //
   // { path: "/blog", component: BlogPage },

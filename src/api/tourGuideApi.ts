@@ -3,7 +3,6 @@ import { tourType } from 'api/tourApi';
 
 export type tourGuideType = {
   id: Number;
-  tourId: Number;
   tour: tourType[];
   tourGuideName: String;
   tourGuideAge: Number;

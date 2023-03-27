@@ -186,7 +186,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           <span className="ml-2.5 text-neutral-500 dark:text-neutral-400">
             Guided by{' '}
             <span className="text-neutral-900 dark:text-neutral-200 font-medium">
-              {e.tourGuides.map((x) => x.tourGuideName)}
+              {e.tourGuide.tourGuideName}
             </span>
           </span>
         </div>
@@ -444,15 +444,15 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           />
           <div>
             <a className="block text-xl font-medium" href="##">
-              {e.tourGuides ? e.tourGuides.map((x) => x.tourGuideName) : ''}
+              {e.tourGuide ? e.tourGuide.tourGuideName : ''}
             </a>
             <div className="mt-1.5 flex items-center text-sm text-neutral-500 dark:text-neutral-400">
               <StartRating />
               <span className="mx-2">·</span>
               <span>
-                <a>{`${e.tourGuides ? e.tourGuides.map(
+                {/* <a>{`${e.tourGuides ? e.tourGuides.map(
                   (x) => String(x.tourId).length,
-                ) : '' } places`}</a>
+                ) : '' } places`}</a> */}
               </span>
             </div>
           </div>
@@ -460,7 +460,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
 
         {/* desc */}
         <span className="block text-neutral-6000 dark:text-neutral-300">
-          <a>{e.tourGuides ? e.tourGuides.map((x) => x.tourGuideBio) : ''}</a>
+          <a>{e.tourGuide ? e.tourGuide.tourGuideBio : ''}</a>
         </span>
 
         {/* info */}

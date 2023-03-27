@@ -20,9 +20,9 @@ const AccountPage: FC<AccountPageProps> = ({ className = '' }) => {
 
   useEffect(() => {
     async function fetchAccounts() {
-      const response = await accountApi.getById(Number(id))
-      setAccounts(response.data)
-      console.log('accoutn', response.data)
+      const response = await accountApi.getAll()
+      setAccounts(response.data.data)
+      console.log('accoutn', response.data.data)
     }
     fetchAccounts()
   }, [])
@@ -42,8 +42,8 @@ const AccountPage: FC<AccountPageProps> = ({ className = '' }) => {
                 <img
                   alt=""
                   style={{
-                    width: '300px',
-                    height: '300px',
+                    width: '200px',
+                    height: '200px',
                     borderRadius: '50%',
                   }}
                   src={accounts?.avatar.toString()}

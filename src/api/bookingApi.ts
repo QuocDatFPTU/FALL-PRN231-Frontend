@@ -3,6 +3,7 @@ import axiosClient from "./axiosClient";
 import { tourGuideType } from "./tourGuideApi";
 import { tourPriceType } from "./tourPriceApi";
 import { tourType } from 'api/tourApi';
+import { paymentType } from "./paymentApi";
 
 export type bookingType = {
   tourId: Number,
@@ -14,7 +15,7 @@ export type bookingType = {
   totalPrice: Number,
   tour: tourType,
   customer: any,
-  payments: any,
+  payments: paymentType[],
 };
 
 export type createBookingType = {

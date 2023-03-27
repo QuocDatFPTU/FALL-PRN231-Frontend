@@ -32,7 +32,7 @@ export interface LocationStates {
   "/pay-done/:id"?: {};
   //
   "/account/:id"?: {};
-  // "/account-savelists"?: {};
+  "/account-savelists"?: {};
   // "/account-password"?: {};
   // "/account-billing"?: {};
   //

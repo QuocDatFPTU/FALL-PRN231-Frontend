@@ -19,7 +19,7 @@ const ListingTourPage: FC<ListingStayPageProps> = ({ className = '' }) => {
   // const [destination, setDestination] = useState<destinationsType>();
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       try {
         const [destinationsResponse, toursResponse] = await Promise.all([
           destinationApi.getAll(),
@@ -56,6 +56,8 @@ const ListingTourPage: FC<ListingStayPageProps> = ({ className = '' }) => {
           }
         })
         setCard(newCard);
+        console.log('card',newCard);
+        
       } catch (error) {
         // handle error
       }

@@ -16,7 +16,7 @@ export interface StayCardProps {
 
 const DEMO_DATA = DEMO_STAY_LISTINGS[0];
 
-const StayCard: FC<StayCardProps> = ({
+const TourCard: FC<StayCardProps> = ({
   size = "default",
   className = "",
   data = DEMO_DATA,
@@ -126,4 +126,4 @@ const StayCard: FC<StayCardProps> = ({
   );
 };
 
-export default StayCard;
+export default TourCard;

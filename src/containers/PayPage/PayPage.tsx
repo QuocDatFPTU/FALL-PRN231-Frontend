@@ -59,7 +59,7 @@ const PayPage: FC<PayPageProps> = ({ className = '' }) => {
       () => {
         // download url
         getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
-          const res = await paymentApi.putImage(booking?.payments[0].id, url)
+          const res = await paymentApi.putImage(Number(booking?.payments[0].id), url)
           if (res.data.status.isSuccess == true) {
             navigate('/')
           }
