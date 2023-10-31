@@ -1,3 +1,4 @@
+import HeroSearchForm from "components/HeroSearchForm/HeroSearchForm";
 import imagePng from "images/hero-right.png";
 import { FC } from "react";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
@@ -15,7 +16,7 @@ const SectionHero: FC<SectionHeroProps> = ({ className = "" }) => {
       <div className="flex flex-col lg:flex-row lg:items-center">
         <div className="flex-shrink-0 lg:w-1/2 flex flex-col items-start space-y-8 sm:space-y-10 pb-14 lg:pb-64 xl:pr-14 lg:mr-10 xl:mr-0">
           <h2 className="font-medium text-4xl md:text-5xl xl:text-7xl !leading-[114%] ">
-            Booking Tours
+            Booking Rooms
           </h2>
           <div>
             <p className="text-base md:text-lg text-neutral-500 dark:text-neutral-400">
@@ -25,11 +26,11 @@ const SectionHero: FC<SectionHeroProps> = ({ className = "" }) => {
             <div className="opacity-0">
               dkal;sdka;sldkasl;dkals;dk;lasdk;alsdkasl;dksal;dk;laskdas;ldsakl;das
             </div>
-            <p className="text-base md:text-lg text-neutral-500 dark:text-neutral-400">
+            {/* <p className="text-base md:text-lg text-neutral-500 dark:text-neutral-400">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente
               in autem ipsam accusamus porro, libero repellat iure dolorum aut
               tenetur magnam? Vero ab sit repellat nostrum itaque unde non hic.
-            </p>
+            </p> */}
             <div className="opacity-0">
               dkal;sdka;sldkasl;dkals;dk;lasdk;alsdkasl;dksal;dk;laskdas;ldsakl;das
             </div>
@@ -41,9 +42,9 @@ const SectionHero: FC<SectionHeroProps> = ({ className = "" }) => {
         </div>
       </div>
 
-      {/* <div className="hidden lg:block z-10 mb-12 lg:mb-0 lg:-mt-40 w-full">
+      <div className="hidden lg:block z-10 mb-12 lg:mb-0 lg:-mt-40 w-full">
         <HeroSearchForm />
-      </div> */}
+      </div>
     </div>
   );
 };

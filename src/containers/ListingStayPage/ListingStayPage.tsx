@@ -61,8 +61,8 @@ const ListingStayPage: FC<ListingStayPageProps> = ({ className = "" }) => {
         ) : (
           <SectionHeroArchivePage
             data={destination!}
-            currentPage="Stays"
-            currentTab="Stays"
+            currentPage="Rooms"
+            currentTab="Rooms"
             className="pt-10 pb-24 lg:pb-28 lg:pt-16 "
           />
         )}

@@ -8,7 +8,7 @@ import { destinationsType } from "api/destinationApi";
 export interface SectionHeroArchivePageProps {
   className?: string;
   listingType?: ReactNode;
-  currentPage: "Stays" | "Experiences" | "Cars" | "Flights";
+  currentPage: "Rooms" | "Experiences" | "Cars" | "Flights";
   currentTab: SearchTab;
   rightImage?: string;
   data?: destinationsType;

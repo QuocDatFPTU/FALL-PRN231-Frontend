@@ -3,12 +3,12 @@ import "firebase/compat/auth";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBBp-XFDdmA97qW7q3Fn8J0nDxyqDdX4_0",
-  authDomain: "tourbooking-ef1b0.firebaseapp.com",
-  projectId: "tourbooking-ef1b0",
-  storageBucket: "tourbooking-ef1b0.appspot.com",
-  messagingSenderId: "89152080109",
-  appId: "1:89152080109:web:b68a4c2b2485ead11724e4",
+  apiKey: "AIzaSyBYXvvI8I9AF1V9Tzf1VdRYlaZ2i6Yak2E",
+  authDomain: "fall2023-tourbooking.firebaseapp.com",
+  projectId: "fall2023-tourbooking",
+  storageBucket: "fall2023-tourbooking.appspot.com",
+  messagingSenderId: "841504507974",
+  appId: "1:841504507974:web:69014349e262cf15872247"
 };
 
 const app = firebase.initializeApp(firebaseConfig);

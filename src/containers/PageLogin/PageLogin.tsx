@@ -74,17 +74,20 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
     setIsLoading(true);
     await signInWithGoogle();
     const token = await auth.currentUser?.getIdToken();
-    if (token) {
-      const res = await authApi.loginWithGoogle({ idToken: token });
-      if (res.data.status.isSuccess) {
-        console.log("res.data.data.token", res.data.data.token);
-        axiosClient.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${res.data.data.token}`;
-        localStorage.setItem("token", res.data.data.token);
-        navigate("/");
-      }
-    }
+    // if (token) {
+    //   const res = await authApi.loginWithGoogle({ idToken: token });
+    //   if (res.data.status.isSuccess) {
+    //     console.log("res.data.data.token", res.data.data.token);
+    //     axiosClient.defaults.headers.common[
+    //       "Authorization"
+    //     ] = `Bearer ${res.data.data.token}`;
+    //     localStorage.setItem("token", res.data.data.token);
+    //     navigate("/");
+    //   }
+    // }
+    setTimeout(() => {
+      navigate("/");
+    }, 1000)
     setIsLoading(false);
   };
 

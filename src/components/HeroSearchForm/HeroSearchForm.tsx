@@ -1,23 +1,23 @@
-import React, { FC, useState } from "react";
-import ExperiencesSearchForm from "./ExperiencesSearchForm";
-import StaySearchForm from "./StaySearchForm";
-import RentalCarSearchForm from "./RentalCarSearchForm";
-import FlightSearchForm from "./FlightSearchForm";
+import React, { FC, useState } from 'react';
+import ExperiencesSearchForm from './ExperiencesSearchForm';
+import StaySearchForm from './StaySearchForm';
+import RentalCarSearchForm from './RentalCarSearchForm';
+import FlightSearchForm from './FlightSearchForm';
 
-export type SearchTab = "Stays" | "Experiences" | "Cars" | "Flights";
+export type SearchTab = 'Rooms' | 'Experiences' | 'Cars' | 'Flights';
 
 export interface HeroSearchFormProps {
   className?: string;
   currentTab?: SearchTab;
-  currentPage?: "Stays" | "Experiences" | "Cars" | "Flights";
+  currentPage?: 'Rooms' | 'Experiences' | 'Cars' | 'Flights';
 }
 
 const HeroSearchForm: FC<HeroSearchFormProps> = ({
-  className = "",
-  currentTab = "Stays",
-  currentPage,
+  className = '',
+  currentTab = 'Rooms',
+  currentPage
 }) => {
-  const tabs: SearchTab[] = ["Stays", "Experiences", "Cars", "Flights"];
+  const tabs: SearchTab[] = ['Rooms'];
   const [tabActive, setTabActive] = useState<SearchTab>(currentTab);
 
   const renderTab = () => {
@@ -28,16 +28,13 @@ const HeroSearchForm: FC<HeroSearchFormProps> = ({
           return (
             <li
               onClick={() => setTabActive(tab)}
-              className={`flex-shrink-0 flex items-center cursor-pointer text-sm lg:text-base font-medium ${
-                active
-                  ? ""
-                  : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-400"
+              className={`flex-shrink-0 flex items-center cursor-pointer text-sm lg:text-base font-medium list-none ${
+                active ? '' : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-400'
               } `}
-              key={tab}
-            >
-              {active && (
+              key={tab}>
+              {/* {active && (
                 <span className="block w-2.5 h-2.5 rounded-full bg-neutral-800 dark:bg-neutral-100 mr-2" />
-              )}
+              )} */}
               <span>{tab}</span>
             </li>
           );
@@ -49,14 +46,14 @@ const HeroSearchForm: FC<HeroSearchFormProps> = ({
   const renderForm = () => {
     const isArchivePage = !!currentPage && !!currentTab;
     switch (tabActive) {
-      case "Stays":
+      case 'Rooms':
         return <StaySearchForm haveDefaultValue={isArchivePage} />;
-      case "Experiences":
-        return <ExperiencesSearchForm haveDefaultValue={isArchivePage} />;
-      case "Cars":
-        return <RentalCarSearchForm haveDefaultValue={isArchivePage} />;
-      case "Flights":
-        return <FlightSearchForm haveDefaultValue={isArchivePage} />;
+      // case "Experiences":
+      //   return <ExperiencesSearchForm haveDefaultValue={isArchivePage} />;
+      // case "Cars":
+      //   return <RentalCarSearchForm haveDefaultValue={isArchivePage} />;
+      // case "Flights":
+      //   return <FlightSearchForm haveDefaultValue={isArchivePage} />;
 
       default:
         return null;
@@ -66,8 +63,7 @@ const HeroSearchForm: FC<HeroSearchFormProps> = ({
   return (
     <div
       className={`nc-HeroSearchForm w-full max-w-6xl py-5 lg:py-0 ${className}`}
-      data-nc-id="HeroSearchForm"
-    >
+      data-nc-id="HeroSearchForm">
       {renderTab()}
       {renderForm()}
     </div>
