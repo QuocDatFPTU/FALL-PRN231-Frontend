@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { PathName } from "routers/types";
 
 interface Props {
-  href?: PathName;
+  href?: string;
 }
 
 const ButtonSubmit: FC<Props> = ({ href = "/listing-stay-map" }) => {

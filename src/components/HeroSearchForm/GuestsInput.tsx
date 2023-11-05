@@ -12,7 +12,7 @@ export interface GuestsInputProps {
   onChange?: (data: GuestsObject) => void;
   fieldClassName?: string;
   className?: string;
-  buttonSubmitHref?: PathName;
+  buttonSubmitHref?: string;
   hasButtonSubmit?: boolean;
 }
 
@@ -116,11 +116,11 @@ const GuestsInput: FC<GuestsInputProps> = ({
             </div>
 
             {/* BUTTON SUBMIT OF FORM */}
-            {/* {hasButtonSubmit && (
+            {hasButtonSubmit && (
               <div className="pr-2 xl:pr-4">
                 <ButtonSubmit href={buttonSubmitHref} />
               </div>
-            )} */}
+            )}
           </div>
           <Transition
             as={Fragment}
