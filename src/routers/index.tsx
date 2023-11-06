@@ -21,6 +21,7 @@ import ScrollToTop from "./ScrollToTop";
 import { Page } from "./types";
 import ListingDestionationPage from './../containers/ListingStayPage/ListingDestinationPage';
 import AccountSavelists from "containers/AccountPage/AccountSavelists";
+import TestCheckout from "containers/TestCheckout/TestCheckout";
 
 export const pages: Page[] = [
   { path: "/", exact: true, component: PageHome },
@@ -86,6 +87,7 @@ export const pages: Page[] = [
   { path: "/signup", component: PageSignUp },
   { path: "/login", component: PageLogin },
   { path: "/subscription", component: PageSubcription },
+  { path: "/test-checkout", component: TestCheckout },
   //
 ];
 

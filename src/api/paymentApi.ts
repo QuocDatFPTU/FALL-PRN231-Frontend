@@ -52,6 +52,10 @@ const paymentApi = {
     const url = `/Bookings/${id}`;
     return axiosClient.delete(url);
   },
+  testPayment(params?: any) {
+    const url = "/payments/vnpay-url";
+    return axiosClient.get(url, {params});
+  },
 };
 
 export default paymentApi;

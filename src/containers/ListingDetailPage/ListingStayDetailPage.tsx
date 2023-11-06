@@ -130,23 +130,23 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
   const [destination, setDestinations] = useState<destinationsType>()
   const [tour, setTour] = useState<tourType>()
   const [guide, setGuide] = useState<tourGuideType>()
-  useEffect(() => {
-    ;(async () => {
-      const tours = await (await tourApi.getById(Number(id))).data.data
-      const destinations = await (await destinationApi.getAll({ tourId: id }))
-        .data.data
-      const tourguide = await (await tourGuideApi.getAll({ tourId: id })).data
-        .data
-        setSelectedDate({
-          startDate: moment(tours?.tourDetails[0].startDate),
-          endDate: moment(tours?.tourDetails[0].endDate),
-        });
-      setTour(tours)
-      setDestinations(destinations)
-      setGuide(tourguide)
-      //console.log("tour", tour);
-    })()
-  }, [])
+  // useEffect(() => {
+  //   ;(async () => {
+  //     const tours = await (await tourApi.getById(Number(id))).data.data
+  //     const destinations = await (await destinationApi.getAll({ tourId: id }))
+  //       .data.data
+  //     const tourguide = await (await tourGuideApi.getAll({ tourId: id })).data
+  //       .data
+  //       setSelectedDate({
+  //         startDate: moment(tours?.tourDetails[0].startDate),
+  //         endDate: moment(tours?.tourDetails[0].endDate),
+  //       });
+  //     setTour(tours)
+  //     setDestinations(destinations)
+  //     setGuide(tourguide)
+  //     //console.log("tour", tour);
+  //   })()
+  // }, [])
 
   // setSelectedDate({
   //   startDate: moment(tours?.tourDetails[0].startDate),

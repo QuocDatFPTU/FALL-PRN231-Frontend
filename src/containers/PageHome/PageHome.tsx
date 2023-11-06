@@ -122,9 +122,8 @@ function PageHome() {
 
     useEffect(() => {
         (async () => {
-            const { data } = await destinationApi.getAll();
+            const { data } = await destinationApi.getTopDestinations();
             const list = data.data
-                .filter((x: destinationsType) => x.status != 0)
                 .map((e: destinationsType) => {
                     return {
                         id: e.id,
