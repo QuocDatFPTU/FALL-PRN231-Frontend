@@ -65,11 +65,11 @@ const AccountSavelists = () => {
               ))}
             </Tab.List> */}
                 <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {booking
+                  {/* {booking
                     .filter((_, i) => i < 8)
                     .map((stay) => (
                       <StayCard key={stay.id} data={stay} />
-                    ))}
+                    ))} */}
                 </div>
             {/* <Tab.Panels> */}
               {/* <Tab.Panel className="mt-8"> */}

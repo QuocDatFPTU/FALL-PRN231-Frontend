@@ -9,6 +9,14 @@ export type destinationsType = {
   destinationImages: destinationImagesType[];
 };
 
+export type destinationsTypeNew = {
+  id: Number;
+  name: string;
+  noOfHotels: string;
+  href: string;
+  imageUrl: string;
+};
+
 export type destinationImagesType = {
   id: Number;
   destinationId: Number;
@@ -25,6 +33,11 @@ const destinationApi = {
     const url = '/cities/top-destinations';
     return axiosClient.get(url, { params });
   },
+  getRecommendDestinations(id?: number, params?: QueryString) {
+    const url = `/cities/${id}/place-recommendations`;
+    return axiosClient.get(url, { params });
+  },
+
   getById(id: Number) {
     const url = `/cities/unified-suggest-result/${id}`;
     return axiosClient.get(url);

@@ -6,15 +6,17 @@ import { useRef } from 'react';
 import RecentSearchList from 'components/RecentSearchList/RecentSearchList';
 import { useDebounce } from 'react-use';
 import destinationApi from 'api/destinationApi';
+import { LocationType } from './StaySearchForm';
 
 export interface LocationInputProps {
-  defaultValue: string;
-  onChange?: (value: string) => void;
-  onInputDone?: (value: string) => void;
+  defaultValue: LocationType;
+  onChange?: (value: LocationType) => void;
+  onInputDone?: (value: LocationType) => void;
   placeHolder?: string;
   desc?: string;
   className?: string;
   autoFocus?: boolean;
+  locationRef: React.RefObject<HTMLSelectElement>,
 }
 
 type DestinationResponse = {
@@ -33,12 +35,14 @@ const LocationInput: FC<LocationInputProps> = ({
   onInputDone,
   placeHolder = 'Location',
   desc = 'Where are you going?',
-  className = 'nc-flex-1.5'
+  className = 'nc-flex-1.5',
+  locationRef,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [value, setValue] = useState<string>(defaultValue);
+  const [value, setValue] = useState<string>(defaultValue.name);
+  const [id, setId] = useState<number>(0);
   const [showPopover, setShowPopover] = useState(autoFocus);
   const [destinationList, setDestinationList] = useState<DestinationResponse[]>([]);
   const [, cancel] = useDebounce(
@@ -46,7 +50,6 @@ const LocationInput: FC<LocationInputProps> = ({
       setValue(value);
       if (value.length !== 0) {
         const data = await destinationApi.getAll({ searchText: value, limit: 10 });
-        console.log(data);
         setDestinationList(data.data);
       }
     },
@@ -87,9 +90,11 @@ const LocationInput: FC<LocationInputProps> = ({
     setShowPopover(false);
   };
 
-  const handleSelectLocation = (item: string) => {
-    setValue(item);
+  const handleSelectLocation = (item: LocationType) => {    
+    setValue(item.name);
+    setId(item.id);
     onInputDone && onInputDone(item);
+    onChange && onChange(item);
     setShowPopover(false);
   };
 
@@ -102,14 +107,14 @@ const LocationInput: FC<LocationInputProps> = ({
         <RecentSearchList />
         <div className="mt-2">
           {[
-            "Hamptons, Suffolk County, NY",
-            "Las Vegas, NV, United States",
-            "Ueno, Taito, Tokyo",
-            "Ikebukuro, Toshima, Tokyo",
-          ].map((item) => (
+            { name: 'Hamptons, Suffolk County, NY', id: -4 },
+            { name: 'Las Vegas, NV, United States', id: -3 },
+            { name: 'Ueno, Taito, Tokyo', id: -2 },
+            { name: 'Ikebukuro, Toshima, Tokyo', id: -1 }
+          ].map((item: LocationType) => (
             <span
               onClick={() => handleSelectLocation(item)}
-              key={item}
+              key={item.id}
               className="flex px-4 sm:px-8 items-center space-x-3 sm:space-x-4 py-4 sm:py-5 hover:bg-neutral-100 dark:hover:bg-neutral-700 cursor-pointer">
               <span className="block text-neutral-400">
                 <svg
@@ -127,7 +132,7 @@ const LocationInput: FC<LocationInputProps> = ({
                 </svg>
               </span>
               <span className=" block font-medium text-neutral-700 dark:text-neutral-200">
-                {item}
+                {item.name}
               </span>
             </span>
           ))}
@@ -141,7 +146,7 @@ const LocationInput: FC<LocationInputProps> = ({
       <>
         {destinationList.map((item) => (
           <span
-            onClick={() => handleSelectLocation(item.name)}
+            onClick={() => handleSelectLocation(item)}
             key={item.id}
             className="flex px-4 sm:px-8 items-center space-x-3 sm:space-x-4 py-4 sm:py-5 hover:bg-neutral-100 dark:hover:bg-neutral-700 cursor-pointer">
             <span className="block text-neutral-400">
@@ -165,7 +170,9 @@ const LocationInput: FC<LocationInputProps> = ({
                 />
               </svg>
             </span>
-            <span className="block font-medium text-neutral-700 dark:text-neutral-200">{item.name}</span>
+            <span className="block font-medium text-neutral-700 dark:text-neutral-200">
+              {item.name}
+            </span>
           </span>
         ))}
       </>
@@ -208,7 +215,8 @@ const LocationInput: FC<LocationInputProps> = ({
             autoFocus={showPopover}
             onChange={(e) => {
               setValue(e.currentTarget.value);
-              onChange && onChange(e.currentTarget.value);
+              
+              // onChange && onChange({ name: e.currentTarget.value, id: id });
             }}
             ref={inputRef}
           />
@@ -219,7 +227,8 @@ const LocationInput: FC<LocationInputProps> = ({
             <ClearDataButton
               onClick={() => {
                 setValue('');
-                onChange && onChange('');
+                setId(0);
+                onChange && onChange({ name: '', id: 0 });
               }}
             />
           )}

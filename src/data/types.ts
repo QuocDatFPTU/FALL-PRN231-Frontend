@@ -14,8 +14,23 @@ export interface TaxonomyType {
   thumbnail?: string;
   desc?: string;
   color?: TwMainColor | string;
-  taxonomy: "category" | "tag";
-  listingType?: "stay" | "experiences" | "car";
+  taxonomy: 'category' | 'tag';
+  listingType?: 'stay' | 'experiences' | 'car';
+}
+
+export interface TaxonomyTypeNew {
+  id: string | number;
+  name: string;
+  thumbnail?: string;
+  desc?: string;
+  color?: TwMainColor | string;
+  taxonomy: 'category' | 'tag';
+  listingType?: 'stay' | 'experiences' | 'car';
+  latitude?: number;
+  longitude?: number;
+  noOfHotels?: number;
+  imageUrl?: string;
+  href?: string;
 }
 
 export interface AuthorType {
@@ -45,18 +60,18 @@ export interface PostDataType {
   commentCount: number;
   viewdCount: number;
   readingTime: number;
-  postType?: "standard" | "video" | "gallery" | "audio";
+  postType?: 'standard' | 'video' | 'gallery' | 'audio';
 }
 
 export type TwMainColor =
-  | "pink"
-  | "green"
-  | "yellow"
-  | "red"
-  | "indigo"
-  | "blue"
-  | "purple"
-  | "gray";
+  | 'pink'
+  | 'green'
+  | 'yellow'
+  | 'red'
+  | 'indigo'
+  | 'blue'
+  | 'purple'
+  | 'gray';
 
 //
 export interface StayDataType {
@@ -72,7 +87,7 @@ export interface StayDataType {
   reviewStart: number;
   reviewCount: number;
   like: boolean;
-  galleryImgs: string[];
+  galleryImgs: string[] | undefined;
   price: string;
   listingCategory: TaxonomyType;
   maxGuests: number;
@@ -84,6 +99,35 @@ export interface StayDataType {
     lat: number;
     lng: number;
   };
+}
+
+export interface StayDataTypeNew {
+  id: string | number;
+  author: AuthorType;
+  date: string;
+  href: string;
+  title: string;
+  featuredImage: string;
+  commentCount: number;
+  viewCount: number;
+  address: string;
+  reviewStart: number;
+  reviewCount: number;
+  like: boolean;
+  galleryImgs: string[] | undefined;
+  price: string;
+  listingCategory: TaxonomyType;
+  maxGuests: number;
+  bedrooms: number;
+  bathrooms: number;
+  saleOff?: string | null;
+  isAds: boolean | null;
+  map: {
+    lat: number;
+    lng: number;
+  };
+  checkInDate: string;
+  checkOutDate: string;
 }
 
 //

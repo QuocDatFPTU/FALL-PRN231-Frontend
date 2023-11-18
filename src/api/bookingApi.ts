@@ -1,21 +1,21 @@
-import { tourDetailType } from "api/tourDetailsApi";
-import axiosClient from "./axiosClient";
-import { tourGuideType } from "./tourGuideApi";
-import { tourPriceType } from "./tourPriceApi";
-import { tourType } from 'api/tourApi';
-import { paymentType } from "./paymentApi";
+import { tourDetailType } from 'api/tourDetailsApi';
+import axiosClient from './axiosClient';
+import { tourGuideType } from './tourGuideApi';
+import { tourPriceType } from './tourPriceApi';
+import { tourType } from 'api/hotelApi';
+import { paymentType } from './paymentApi';
 
 export type bookingType = {
-  tourId: Number,
-  customerId: Number,
-  bookingDate: Date,
-  numAdults: Number,
-  numChildren: Number,
-  numInfants: Number,
-  totalPrice: Number,
-  tour: tourType,
-  customer: any,
-  payments: paymentType[],
+  tourId: Number;
+  customerId: Number;
+  bookingDate: Date;
+  numAdults: Number;
+  numChildren: Number;
+  numInfants: Number;
+  totalPrice: Number;
+  tour: tourType;
+  customer: any;
+  payments: paymentType[];
 };
 
 export type createBookingType = {
@@ -37,10 +37,26 @@ export type createBookingType = {
 //   cost: Number;
 //   available: Number;
 // };
-
+interface DataReserveType {
+  totalPrice: number;
+  customer: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: 'string';
+  };
+  roomTypeRequests: [
+    {
+      roomTypeId: number;
+      quantity: number;
+      checkInDate: string;
+      checkOutDate: string;
+    }
+  ];
+}
 const bookingApi = {
   getAll(params?: any) {
-    const url = "/bookings";
+    const url = '/bookings';
     return axiosClient.get(url, { params });
   },
 
@@ -59,13 +75,13 @@ const bookingApi = {
   //   return axiosClient.get(url, { params });
   // },
 
-  create(data: createBookingType) {
-    const url = "/bookings";
+  create(query: string, data: DataReserveType) {
+    const url = `/payments/return?returnUrl=${encodeURIComponent(query)}`;
     return axiosClient.post(url, data);
   },
 
   update(data: bookingType) {
-    const url = "/bookings";
+    const url = '/bookings';
     return axiosClient.put(url, data);
   },
 
@@ -73,6 +89,10 @@ const bookingApi = {
     const url = `/bookings/${id}`;
     return axiosClient.delete(url);
   },
+  getConfirm(query : any) {
+    const url = `/payments/IPN?${query}`;
+    return axiosClient.get(url);
+  }
 };
 
 export default bookingApi;

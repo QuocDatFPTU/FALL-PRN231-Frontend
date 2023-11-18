@@ -1,26 +1,23 @@
-import BtnLikeIcon from "components/BtnLikeIcon/BtnLikeIcon";
-import GallerySlider from "components/GallerySlider/GallerySlider";
-import SaleOffBadge from "components/SaleOffBadge/SaleOffBadge";
-import StartRating from "components/StartRating/StartRating";
-import { DEMO_STAY_LISTINGS } from "data/listings";
-import { StayDataType } from "data/types";
-import { FC } from "react";
-import { Link } from "react-router-dom";
-import Badge from "shared/Badge/Badge";
+import BtnLikeIcon from 'components/BtnLikeIcon/BtnLikeIcon';
+import GallerySlider from 'components/GallerySlider/GallerySlider';
+import SaleOffBadge from 'components/SaleOffBadge/SaleOffBadge';
+import StartRating from 'components/StartRating/StartRating';
+import { DEMO_STAY_LISTINGS } from 'data/listings';
+import { StayDataType, StayDataTypeNew } from 'data/types';
+import { FC } from 'react';
+import { Link } from 'react-router-dom';
+import Badge from 'shared/Badge/Badge';
 
 export interface StayCardProps {
   className?: string;
-  data?: StayDataType;
-  size?: "default" | "small";
+  data: StayDataTypeNew;
+  size?: 'default' | 'small';
+  quantityState?: number;
 }
 
-const DEMO_DATA = DEMO_STAY_LISTINGS[0];
+// const DEMO_DATA = DEMO_STAY_LISTINGS[0];
 
-const StayCard: FC<StayCardProps> = ({
-  size = "default",
-  className = "",
-  data = DEMO_DATA,
-}) => {
+const StayCard: FC<StayCardProps> = ({ size = 'default', className = '', data, quantityState }) => {
   const {
     galleryImgs,
     //listingCategory,
@@ -34,7 +31,7 @@ const StayCard: FC<StayCardProps> = ({
     price,
     reviewStart,
     reviewCount,
-    id,
+    id
   } = data;
 
   const renderSliderGallery = () => {
@@ -54,7 +51,7 @@ const StayCard: FC<StayCardProps> = ({
 
   const renderContent = () => {
     return (
-      <div className={size === "default" ? "p-4 space-y-4" : "p-3 space-y-2"}>
+      <div className={size === 'default' ? 'p-4 space-y-4' : 'p-3 space-y-2'}>
         <div className="space-y-2">
           <span className="text-sm text-neutral-500 dark:text-neutral-400">
             {/* {listingCategory.name} · {bedrooms} beds */}
@@ -63,22 +60,18 @@ const StayCard: FC<StayCardProps> = ({
           <div className="flex items-center space-x-2">
             {isAds && <Badge name="ADS" color="green" />}
             <h2
-              className={` font-medium capitalize ${
-                size === "default" ? "text-lg" : "text-base"
-              }`}
-            >
+              className={` font-medium capitalize ${size === 'default' ? 'text-lg' : 'text-base'}`}>
               <span className="line-clamp-1">{title}</span>
             </h2>
           </div>
           <div className="flex items-center text-neutral-500 dark:text-neutral-400 text-sm space-x-2">
-            {size === "default" && (
+            {size === 'default' && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+                stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -99,7 +92,7 @@ const StayCard: FC<StayCardProps> = ({
         <div className="w-14 border-b border-neutral-100 dark:border-neutral-800"></div>
         <div className="flex justify-between items-center">
           <span className="text-base font-semibold">
-            ${price}
+            đ {price}
             {` `}
             {/* {size === "default" && (
               <span className="text-sm text-neutral-500 dark:text-neutral-400 font-normal">
@@ -107,9 +100,7 @@ const StayCard: FC<StayCardProps> = ({
               </span>
             )} */}
           </span>
-          {!!reviewStart && (
-            <StartRating reviewCount={reviewCount} point={reviewStart} />
-          )}
+          {!!reviewStart && <StartRating reviewCount={reviewCount} point={reviewStart} />}
         </div>
       </div>
     );
@@ -118,10 +109,17 @@ const StayCard: FC<StayCardProps> = ({
   return (
     <div
       className={`nc-StayCard group relative bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl overflow-hidden will-change-transform hover:shadow-xl transition-shadow ${className}`}
-      data-nc-id="StayCard"
-    >
+      data-nc-id="StayCard">
       {renderSliderGallery()}
-      <Link to={href}>{renderContent()}</Link>
+      <Link
+        to={href!}
+        state={{
+          quantity: quantityState,
+          checkInDate: data.checkInDate,
+          checkOutDate: data.checkOutDate
+        }}>
+        {renderContent()}
+      </Link>
     </div>
   );
 };
