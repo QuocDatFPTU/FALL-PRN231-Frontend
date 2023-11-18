@@ -1,20 +1,20 @@
-import { ComponentType } from "react";
+import { ComponentType } from 'react';
 
 export interface LocationStates {
-  "/"?: {};
-  "/#"?: {};
-  "/home-2"?: {};
-  "/home-3"?: {};
-  "/home-1-header-2"?: {};
+  '/'?: {};
+  '/#'?: {};
+  '/home-2'?: {};
+  '/home-3'?: {};
+  '/home-1-header-2'?: {};
   //
   // "/listing-flights"?: {};
   //
-  "/listing-stay"?: {};
-  "/listing-stay/:id"?: {};
+  '/listing-stay'?: {};
+  '/listing-tour/:id'?: {};
   // "/listing-stay-map"?: {};
-  "/listing-stay-detail/:id"?: {};
+  '/listing-stay-detail/:id'?: {};
   //
-  "/listing-tour"?: {};
+  '/listing-tour'?: {};
   //
   // "/listing-experiences"?: {};
   // "/listing-experiences-map"?: {};
@@ -28,11 +28,11 @@ export interface LocationStates {
   // "/listing-car-map"?: {};
   // "/listing-car-detail"?: {};
   //
-  "/checkout/:id"?: {};
-  "/pay-done/:id"?: {};
+  '/checkout': {};
+  '/pay-done/:id'?: {};
   //
-  "/account/:id"?: {};
-  "/account-savelists"?: {};
+  '/account/:id'?: {};
+  '/account-savelists'?: {};
   // "/account-password"?: {};
   // "/account-billing"?: {};
   //
@@ -50,15 +50,17 @@ export interface LocationStates {
   // "/add-listing-9"?: {};
   // "/add-listing-10"?: {};
   //
-  "/author"?: {};
-  "/search"?: {};
-  "/about"?: {};
-  "/contact"?: {};
-  "/login"?: {};
-  "/signup"?: {};
-  "/forgot-pass"?: {};
-  "/page404"?: {};
-  "/subscription"?: {};
+  '/author'?: {};
+  '/search'?: {};
+  '/about'?: {};
+  '/contact'?: {};
+  '/login'?: {};
+  '/signup'?: {};
+  '/forgot-pass'?: {};
+  '/page404'?: {};
+  '/subscription'?: {};
+  '/test-checkout'?: {};
+  '/pay-done': {};
 }
 
 export type PathName = keyof LocationStates;

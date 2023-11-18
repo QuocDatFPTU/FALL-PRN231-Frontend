@@ -3,7 +3,7 @@ import CardCategory3 from "components/CardCategory3/CardCategory3";
 import CardCategory4 from "components/CardCategory4/CardCategory4";
 import CardCategory5 from "components/CardCategory5/CardCategory5";
 import Heading from "components/Heading/Heading";
-import { TaxonomyType } from "data/types";
+import { TaxonomyType, TaxonomyTypeNew } from "data/types";
 import useNcId from "hooks/useNcId";
 import { FC, useEffect, useMemo } from "react";
 import NextPrev from "shared/NextPrev/NextPrev";
@@ -20,6 +20,17 @@ export interface SectionSliderNewCategoriesProps {
   uniqueClassName: string;
 }
 
+export interface SectionSliderNewCategoriesPropsNew {
+  className?: string;
+  itemClassName?: string;
+  heading?: string;
+  subHeading?: string;
+  categories?: TaxonomyTypeNew[];
+  categoryCardType?: "card3" | "card4" | "card5";
+  itemPerRow?: 4 | 5;
+  sliderStyle?: "style1" | "style2";
+  uniqueClassName: string;
+}
 // const DEMO_CATS: TaxonomyType[] = [
 //   {
 //     id: "1",
@@ -77,13 +88,13 @@ export interface SectionSliderNewCategoriesProps {
 //   },
 // ];
 
-const SectionSliderNewCategories: FC<SectionSliderNewCategoriesProps> = ({
-  heading = "Destinations",
+const SectionSliderNewCategories: FC<SectionSliderNewCategoriesPropsNew> = ({
+  heading = "The most attractive destinations in Vietnam",
   subHeading = "Descriptions for sections",
   className = "",
   itemClassName = "",
   categories,
-  itemPerRow = 5,
+  itemPerRow = 4,
   categoryCardType = "card3",
   sliderStyle = "style1",
   uniqueClassName,
@@ -126,14 +137,14 @@ const SectionSliderNewCategories: FC<SectionSliderNewCategoriesProps> = ({
     }, 100);
   }, [MY_GLIDEJS, UNIQUE_CLASS]);
 
-  const renderCard = (item: TaxonomyType, index: number) => {
+  const renderCard = (item: TaxonomyTypeNew, index: number) => {
     switch (categoryCardType) {
       case "card3":
         return <CardCategory3 taxonomy={item} />;
-      case "card4":
-        return <CardCategory4 taxonomy={item} />;
-      case "card5":
-        return <CardCategory5 taxonomy={item} />;
+      // case "card4":
+      //   return <CardCategory4 taxonomy={item} />;
+      // case "card5":
+      //   return <CardCategory5 taxonomy={item} />;
       default:
         return <CardCategory3 taxonomy={item} />;
     }

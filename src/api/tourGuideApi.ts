@@ -1,5 +1,5 @@
-import axiosClient from "./axiosClient";
-import { tourType } from 'api/tourApi';
+import axiosClient from './axiosClient';
+import { tourType } from 'api/hotelApi';
 
 export type tourGuideType = {
   id: Number;
@@ -25,7 +25,7 @@ export type tourGuideType = {
 
 const tourGuideApi = {
   getAll(params?: any) {
-    const url = "/TourGuides";
+    const url = '/TourGuides';
     return axiosClient.get(url, { params });
   },
 
@@ -45,19 +45,19 @@ const tourGuideApi = {
   // },
 
   create(data: tourGuideType) {
-    const url = "/TourGuides";
+    const url = '/TourGuides';
     return axiosClient.post(url, data);
   },
 
   update(data: tourGuideType) {
-    const url = "/TourGuides";
+    const url = '/TourGuides';
     return axiosClient.put(url, data);
   },
 
   delete(id: Number) {
     const url = `/TourGuides/${id}`;
     return axiosClient.delete(url);
-  },
+  }
 };
 
 export default tourGuideApi;

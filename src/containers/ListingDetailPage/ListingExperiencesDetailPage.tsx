@@ -490,7 +490,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
             />
           </div>
           <div className="flex-1 listingExperiencesDetailPage__GuestsInput">
-            <GuestsInput
+            {/* <GuestsInput
               fieldClassName="p-4"
               defaultValue={{
                 guestAdults: 1,
@@ -498,7 +498,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
                 guestInfants: 0,
               }}
               hasButtonSubmit={false}
-            />
+            /> */}
           </div>
         </form>
 

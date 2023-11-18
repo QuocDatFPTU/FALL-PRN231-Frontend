@@ -15,8 +15,12 @@ export interface StaySearchFormProps {
   haveDefaultValue?: boolean;
 }
 
+export interface LocationType {
+  name: string;
+  id: number;
+}
 // DEFAULT DATA FOR ARCHIVE PAGE
-const defaultLocationValue = "Tokyo, Jappan";
+const defaultLocationValue = {name: 'Hồ Chí Minh', id: 19};
 const defaultDateRange = {
   startDate: moment(),
   endDate: moment().add(4, "days"),
@@ -34,7 +38,8 @@ const StaySearchForm: FC<StaySearchFormProps> = ({
     startDate: null,
     endDate: null,
   });
-  const [locationInputValue, setLocationInputValue] = useState("");
+  const locationRef = React.useRef(null);
+  const [locationInputValue, setLocationInputValue] = useState<LocationType>({name: '', id: 0});
   const [guestValue, setGuestValue] = useState({});
 
   const [dateFocused, setDateFocused] = useState<FocusedInputShape | null>(
@@ -56,9 +61,10 @@ const StaySearchForm: FC<StaySearchFormProps> = ({
       <form className="w-full relative mt-8 flex rounded-full shadow-xl dark:shadow-2xl bg-white dark:bg-neutral-800 ">
         <LocationInput
           defaultValue={locationInputValue}
-          onChange={(e) => setLocationInputValue(e)}
+          onChange={(e) => {console.log('e', e) ;setLocationInputValue(e)}}
           onInputDone={() => setDateFocused("startDate")}
           className="flex-[1.5]"
+          locationRef={locationRef}
         />
         <StayDatesRangeInput
           defaultValue={dateRangeValue}
@@ -70,6 +76,8 @@ const StaySearchForm: FC<StaySearchFormProps> = ({
           defaultValue={guestValue}
           onChange={(data) => setGuestValue(data)}
           className="flex-[1.2]"
+          location={locationInputValue}
+          dateRange={dateRangeValue}
         />
       </form>
     );

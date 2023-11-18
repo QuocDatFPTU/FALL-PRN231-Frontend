@@ -1,63 +1,143 @@
-import destinationApi, { destinationsType } from "api/destinationApi";
-import tourApi, { tourType } from "api/tourApi";
-import BgGlassmorphism from "components/BgGlassmorphism/BgGlassmorphism";
-import Heading2 from "components/Heading/Heading2";
-import StayCard from "components/StayCard/StayCard";
-import { FC, useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
-import Pagination from "shared/Pagination/Pagination";
+import destinationApi, { destinationsType } from 'api/destinationApi';
+import hotelApi, { HotelTypeNew, defaultRequestPayload } from 'api/hotelApi';
+import tourApi, { tourType } from 'api/hotelApi';
+import BgGlassmorphism from 'components/BgGlassmorphism/BgGlassmorphism';
+import Heading2 from 'components/Heading/Heading2';
+import StayCard from 'components/StayCard/StayCard';
+import { FC, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
+import { useLocation } from 'react-router-dom';
+import Pagination from 'shared/Pagination/Pagination';
+import TabFilters from './TabFilters';
+import moment from 'moment';
 
 export interface ListingStayPageProps {
   className?: string;
 }
 
-const ListingTourPage: FC<ListingStayPageProps> = ({ className = "" }) => {
+const ListingTourPage: FC<ListingStayPageProps> = ({ className = '' }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [card, setCard] = useState([]);
 
+  let { state } = useLocation();
+  console.log('state tour list', state);
   useEffect(() => {
     (async () => {
+      let requestPayload;
       try {
-        const [destinationsResponse, toursResponse] = await Promise.all([
-          destinationApi.getAll(),
-          tourApi.getAll(),
-        ]);
-
-        const destinations = destinationsResponse.data.data;
-        const tours = toursResponse.data.data;
-
-        const newCard = tours.map((e: tourType) => {
-          const destination = destinations.find(
-            (d: destinationsType) => d.id === e.tourDetails[0].destination.id
-          );
-          return {
-            id: e.id,
-            authorId: 10,
-            date: "May 20, 2021",
-            href: `/listing-stay-detail/${e.id}`,
-            listingCategoryId: 17,
-            title: e.tourName,
-            galleryImgs: e.tourDetails[0].destination.destinationImages
-              .map((x) => x.image)
-              .slice(0, 3),
-            commentCount: 70,
-            viewCount: 602,
-            like: false,
-            address: e.tourDetails.map((x) => x.destination.name),
-            reviewStart: 4.8,
-            reviewCount: 28,
-            price: e.tourPrices[0].priceAdults ?? 0,
-            maxGuests: e.tourCapacity,
-            bedrooms: e.tourCapacity,
-            bathrooms: 3,
-            saleOff: "-10% today",
-            isAds: null,
-            map: { lat: 55.2094559, lng: 61.5594641 },
-            destination,
+        if (state) {
+          requestPayload = {
+            cityId: state.cityId,
+            quantity: state.quantity,
+            sorting: {
+              sortField: 'Ranking',
+              sortOrder: 'Desc'
+            },
+            page: {
+              pageIndex: 0,
+              pageSize: 20
+            },
+            searchCriteria: {
+              checkInDate: state.checkInDate,
+              checkOutDate: state.checkOutDate
+            }
           };
-        });
-        setCard(newCard);
-        setIsLoading(false);
+
+          const { data } = await hotelApi.getByIdV2(requestPayload);
+          const newCard = data.data.contends.map((e: HotelTypeNew) => {
+            return {
+              id: e.id,
+              authorId: (e.createdBy ??= '1'),
+              date: e.createdAt,
+              href: `/listing-tour/${e.id}`,
+              listingCategoryId: e.categoryId,
+              title: e.name,
+              featuredImage:
+                e.hotelImages.length !== 0
+                  ? e.hotelImages[0].imageUrl
+                  : 'https://images.pexels.com/photos/1268871/pexels-photo-1268871.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+              galleryImgs:
+                e.hotelImages.length !== 0
+                  ? e.hotelImages.map((e) => e.imageUrl)
+                  : [
+                      'https://images.pexels.com/photos/1268871/pexels-photo-1268871.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+                      'https://images.pexels.com/photos/1179156/pexels-photo-1179156.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+                      'https://images.pexels.com/photos/2506988/pexels-photo-2506988.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
+                    ],
+              commentCount: e.reviewCount,
+              viewCount: e.reviewCount ?? 30,
+              like: false,
+              address: `${e.address?.area?.name}, ${e.address.city.name}`,
+              reviewStart: e.reviewRatting,
+              reviewCount: e.reviewCount ?? 30,
+              price:
+                e.pricePerNight !== null
+                  ? e.pricePerNight.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  : '1,000,000',
+              maxGuests: 4,
+              bedrooms: 10,
+              bathrooms: 3,
+              // saleOff: '-10% today',
+              isAds: null,
+              map: { lat: 55.2094559, lng: 61.5594641 },
+              checkInDate: state.checkInDate,
+              checkOutDate: state.checkOutDate
+            };
+          });
+          console.log('card state not null', newCard);
+          setCard(newCard);
+          setIsLoading(false);
+          // const destinations = destinationsResponse.data.data;
+        } else {
+          const { data } = await hotelApi.getById({
+            ...defaultRequestPayload,
+            cityId: 19,
+            page: { pageSize: 20 }
+          });
+          const newCard = data.data.contends.map((e: HotelTypeNew) => {
+            return {
+              id: e.id,
+              authorId: (e.createdBy ??= '1'),
+              date: e.createdAt,
+              href: `/listing-tour/${e.id}`,
+              listingCategoryId: e.categoryId,
+              title: e.name,
+              featuredImage:
+                e.hotelImages.length !== 0
+                  ? e.hotelImages[0].imageUrl
+                  : 'https://images.pexels.com/photos/1268871/pexels-photo-1268871.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+              galleryImgs:
+                e.hotelImages.length !== 0
+                  ? e.hotelImages.map((e) => e.imageUrl)
+                  : [
+                      'https://images.pexels.com/photos/1268871/pexels-photo-1268871.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+                      'https://images.pexels.com/photos/1179156/pexels-photo-1179156.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+                      'https://images.pexels.com/photos/2506988/pexels-photo-2506988.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
+                    ],
+              commentCount: e.reviewCount,
+              viewCount: e.reviewCount ?? 30,
+              like: false,
+              address: `${e.address?.area?.name}, ${e.address.city.name}`,
+              reviewStart: e.reviewRatting,
+              reviewCount: e.reviewCount ?? 30,
+              price:
+                e.pricePerNight !== null
+                  ? e.pricePerNight.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  : '1,000,000',
+              maxGuests: 4,
+              bedrooms: 10,
+              bathrooms: 3,
+              // saleOff: '-10% today',
+              isAds: null,
+              map: { lat: 55.2094559, lng: 61.5594641 },
+              checkInDate: moment(Date.now()).format('YYYY-MM-DD'),
+              checkOutDate: moment(Date.now() + 2).format('YYYY-MM-DD')
+            };
+          });
+          console.log('Card when state null');
+          setCard(newCard);
+          setIsLoading(false);
+        }
       } catch (error) {
         // handle error
       }
@@ -67,8 +147,7 @@ const ListingTourPage: FC<ListingStayPageProps> = ({ className = "" }) => {
   return (
     <div
       className={`nc-ListingStayPage relative overflow-hidden ${className}`}
-      data-nc-id="ListingTourPage"
-    >
+      data-nc-id="ListingTourPage">
       <Helmet>
         <title>Chisfis || Tour List</title>
       </Helmet>
@@ -76,15 +155,10 @@ const ListingTourPage: FC<ListingStayPageProps> = ({ className = "" }) => {
 
       <div className="container relative overflow-hidden">
         {/* SECTION */}
-        <div
-          className={`nc-SectionGridFilterCard ${className}`}
-          data-nc-id="SectionGridFilterCard"
-        >
+        <div className={`nc-SectionGridFilterCard ${className}`} data-nc-id="SectionGridFilterCard">
           <Heading2 />
 
-          {/* <div className="mb-8 lg:mb-11">
-            <TabFilters />
-          </div> */}
+          <div className="mb-8 lg:mb-11">{/* <TabFilters /> */}</div>
           {isLoading ? (
             <div className="flex justify-center">
               <div role="status">
@@ -93,8 +167,7 @@ const ListingTourPage: FC<ListingStayPageProps> = ({ className = "" }) => {
                   className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
                   viewBox="0 0 100 101"
                   fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                  xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
                     fill="currentColor"
@@ -110,7 +183,11 @@ const ListingTourPage: FC<ListingStayPageProps> = ({ className = "" }) => {
           ) : (
             <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {card?.map((stay: any) => (
-                <StayCard key={stay.id} data={stay} />
+                <StayCard
+                  key={stay.id}
+                  data={stay}
+                  quantityState={state === null ? 2 : state.quantity}
+                />
               ))}
             </div>
           )}

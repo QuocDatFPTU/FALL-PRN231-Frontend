@@ -6,6 +6,7 @@ import ClearDataButton from "./ClearDataButton";
 import ButtonSubmit from "./ButtonSubmit";
 import { GuestsObject } from "components/HeroSearchForm2Mobile/GuestsInput";
 import { PathName } from "routers/types";
+import { DateRage, LocationType } from "./StaySearchForm";
 
 export interface GuestsInputProps {
   defaultValue: GuestsObject;
@@ -14,6 +15,8 @@ export interface GuestsInputProps {
   className?: string;
   buttonSubmitHref?: string;
   hasButtonSubmit?: boolean;
+  location: LocationType;
+  dateRange: DateRage;
 }
 
 const GuestsInput: FC<GuestsInputProps> = ({
@@ -21,8 +24,10 @@ const GuestsInput: FC<GuestsInputProps> = ({
   onChange,
   fieldClassName = "[ nc-hero-field-padding ]",
   className = "[ nc-flex-1 ]",
-  buttonSubmitHref = "/listing-stay-map",
+  buttonSubmitHref = "/listing-tour",
   hasButtonSubmit = true,
+  location,
+  dateRange
 }) => {
   const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(
     defaultValue.guestAdults || 0
@@ -33,7 +38,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
   const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(
     defaultValue.guestInfants || 0
   );
-
+  
   useEffect(() => {
     setGuestAdultsInputValue(defaultValue.guestAdults || 0);
     setGuestChildrenInputValue(defaultValue.guestChildren || 0);
@@ -118,7 +123,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
             {/* BUTTON SUBMIT OF FORM */}
             {hasButtonSubmit && (
               <div className="pr-2 xl:pr-4">
-                <ButtonSubmit href={buttonSubmitHref} />
+                <ButtonSubmit href={buttonSubmitHref} searchData={{location, dateRange, totalGuest:  guestChildrenInputValue + guestAdultsInputValue + guestInfantsInputValue}}/> 
               </div>
             )}
           </div>

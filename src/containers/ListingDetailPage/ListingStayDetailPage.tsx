@@ -1,39 +1,35 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { ArrowRightIcon } from '@heroicons/react/24/outline'
-import destinationApi, { destinationsType } from 'api/destinationApi'
-import tourApi, { tourType } from 'api/tourApi'
-import { tourGuideType } from 'api/tourGuideApi'
-import LocationMarker from 'components/AnyReactComponent/LocationMarker'
-import CommentListing from 'components/CommentListing/CommentListing'
-import FiveStartIconForRate from 'components/FiveStartIconForRate/FiveStartIconForRate'
-import StayDatesRangeInput from 'components/HeroSearchForm/StayDatesRangeInput'
-import { DateRage } from 'components/HeroSearchForm/StaySearchForm'
-import StartRating from 'components/StartRating/StartRating'
-import GoogleMapReact from 'google-map-react'
-import useWindowSize from 'hooks/useWindowResize'
-import moment from 'moment'
-import { FC, Fragment, useEffect, useState } from 'react'
-import {
-  DayPickerRangeController,
-  FocusedInputShape,
-  isInclusivelyAfterDay
-} from 'react-dates'
-import { useParams } from 'react-router-dom'
-import Avatar from 'shared/Avatar/Avatar'
-import Badge from 'shared/Badge/Badge'
-import ButtonCircle from 'shared/Button/ButtonCircle'
-import ButtonPrimary from 'shared/Button/ButtonPrimary'
-import ButtonSecondary from 'shared/Button/ButtonSecondary'
-import ButtonClose from 'shared/ButtonClose/ButtonClose'
-import Input from 'shared/Input/Input'
-import NcImage from 'shared/NcImage/NcImage'
-import tourGuideApi from '../../api/tourGuideApi'
-import LikeSaveBtns from './LikeSaveBtns'
-import ModalPhotos from './ModalPhotos'
+import { Dialog, Transition } from '@headlessui/react';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import destinationApi, { destinationsType } from 'api/destinationApi';
+import tourApi, { tourType } from 'api/hotelApi';
+import { tourGuideType } from 'api/tourGuideApi';
+import LocationMarker from 'components/AnyReactComponent/LocationMarker';
+import CommentListing from 'components/CommentListing/CommentListing';
+import FiveStartIconForRate from 'components/FiveStartIconForRate/FiveStartIconForRate';
+import StayDatesRangeInput from 'components/HeroSearchForm/StayDatesRangeInput';
+import { DateRage } from 'components/HeroSearchForm/StaySearchForm';
+import StartRating from 'components/StartRating/StartRating';
+import GoogleMapReact from 'google-map-react';
+import useWindowSize from 'hooks/useWindowResize';
+import moment from 'moment';
+import { FC, Fragment, useEffect, useState } from 'react';
+import { DayPickerRangeController, FocusedInputShape, isInclusivelyAfterDay } from 'react-dates';
+import { useParams } from 'react-router-dom';
+import Avatar from 'shared/Avatar/Avatar';
+import Badge from 'shared/Badge/Badge';
+import ButtonCircle from 'shared/Button/ButtonCircle';
+import ButtonPrimary from 'shared/Button/ButtonPrimary';
+import ButtonSecondary from 'shared/Button/ButtonSecondary';
+import ButtonClose from 'shared/ButtonClose/ButtonClose';
+import Input from 'shared/Input/Input';
+import NcImage from 'shared/NcImage/NcImage';
+import tourGuideApi from '../../api/tourGuideApi';
+import LikeSaveBtns from './LikeSaveBtns';
+import ModalPhotos from './ModalPhotos';
 
 export interface ListingStayDetailPageProps {
-  className?: string
-  isPreviewMode?: boolean
+  className?: string;
+  isPreviewMode?: boolean;
 }
 
 const PHOTOS: string[] = [
@@ -45,8 +41,8 @@ const PHOTOS: string[] = [
   'https://images.pexels.com/photos/1320686/pexels-photo-1320686.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
   'https://images.pexels.com/photos/261394/pexels-photo-261394.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
   'https://images.pexels.com/photos/2861361/pexels-photo-2861361.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-  'https://images.pexels.com/photos/2677398/pexels-photo-2677398.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-]
+  'https://images.pexels.com/photos/2677398/pexels-photo-2677398.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260'
+];
 
 const Amenities_demos = [
   { name: 'la-key', icon: 'la-key' },
@@ -75,78 +71,75 @@ const Amenities_demos = [
   { name: 'la-dice', icon: 'la-dice' },
   { name: 'la-dumbbell', icon: 'la-dumbbell' },
   { name: 'la-hot-tub', icon: 'la-hot-tub' },
-  { name: 'la-infinity', icon: 'la-infinity' },
-]
+  { name: 'la-infinity', icon: 'la-infinity' }
+];
 
 const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
   className = '',
-  isPreviewMode,
+  isPreviewMode
 }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [openFocusIndex, setOpenFocusIndex] = useState(0)
+  const [isOpen, setIsOpen] = useState(false);
+  const [openFocusIndex, setOpenFocusIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState<DateRage>({
     startDate: moment().add(4, 'days'),
-    endDate: moment().add(10, 'days'),
-  })
-  const [
-    focusedInputSectionCheckDate,
-    setFocusedInputSectionCheckDate,
-  ] = useState<FocusedInputShape>('startDate')
-  let [isOpenModalAmenities, setIsOpenModalAmenities] = useState(false)
+    endDate: moment().add(10, 'days')
+  });
+  const [focusedInputSectionCheckDate, setFocusedInputSectionCheckDate] =
+    useState<FocusedInputShape>('startDate');
+  let [isOpenModalAmenities, setIsOpenModalAmenities] = useState(false);
 
-  const windowSize = useWindowSize()
+  const windowSize = useWindowSize();
 
   const getDaySize = () => {
     if (windowSize.width <= 375) {
-      return 34
+      return 34;
     }
     if (windowSize.width <= 500) {
-      return undefined
+      return undefined;
     }
     if (windowSize.width <= 1280) {
-      return 56
+      return 56;
     }
-    return 48
-  }
+    return 48;
+  };
 
   function closeModalAmenities() {
-    setIsOpenModalAmenities(false)
+    setIsOpenModalAmenities(false);
   }
 
   function openModalAmenities() {
-    setIsOpenModalAmenities(true)
+    setIsOpenModalAmenities(true);
   }
 
   const handleOpenModal = (index: number) => {
-    setIsOpen(true)
-    setOpenFocusIndex(index)
-  }
+    setIsOpen(true);
+    setOpenFocusIndex(index);
+  };
 
-  const handleCloseModal = () => setIsOpen(false)
+  const handleCloseModal = () => setIsOpen(false);
 
-  
-  const { id } = useParams()
+  const { id } = useParams();
 
-  const [destination, setDestinations] = useState<destinationsType>()
-  const [tour, setTour] = useState<tourType>()
-  const [guide, setGuide] = useState<tourGuideType>()
-  useEffect(() => {
-    ;(async () => {
-      const tours = await (await tourApi.getById(Number(id))).data.data
-      const destinations = await (await destinationApi.getAll({ tourId: id }))
-        .data.data
-      const tourguide = await (await tourGuideApi.getAll({ tourId: id })).data
-        .data
-        setSelectedDate({
-          startDate: moment(tours?.tourDetails[0].startDate),
-          endDate: moment(tours?.tourDetails[0].endDate),
-        });
-      setTour(tours)
-      setDestinations(destinations)
-      setGuide(tourguide)
-      //console.log("tour", tour);
-    })()
-  }, [])
+  const [destination, setDestinations] = useState<destinationsType>();
+  const [tour, setTour] = useState<tourType>();
+  const [guide, setGuide] = useState<tourGuideType>();
+  // useEffect(() => {
+  //   ;(async () => {
+  //     const tours = await (await tourApi.getById(Number(id))).data.data
+  //     const destinations = await (await destinationApi.getAll({ tourId: id }))
+  //       .data.data
+  //     const tourguide = await (await tourGuideApi.getAll({ tourId: id })).data
+  //       .data
+  //       setSelectedDate({
+  //         startDate: moment(tours?.tourDetails[0].startDate),
+  //         endDate: moment(tours?.tourDetails[0].endDate),
+  //       });
+  //     setTour(tours)
+  //     setDestinations(destinations)
+  //     setGuide(tourguide)
+  //     //console.log("tour", tour);
+  //   })()
+  // }, [])
 
   // setSelectedDate({
   //   startDate: moment(tours?.tourDetails[0].startDate),
@@ -163,9 +156,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         </div>
 
         {/* 2 */}
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
-          {e.tourName}
-        </h2>
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">{e.tourName}</h2>
 
         {/* 3 */}
         <div className="flex items-center space-x-4">
@@ -224,8 +215,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           </div> */}
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   const renderSection2 = (e: tourType) => {
     return (
@@ -241,8 +232,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           <span>{e.tourDetails.map((x) => x.tourDescription)}</span>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   const renderSection3 = () => {
     return (
@@ -267,14 +258,12 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         {/* ----- */}
         <div className="w-14 border-b border-neutral-200"></div>
         <div>
-          <ButtonSecondary onClick={openModalAmenities}>
-            View more 20 amenities
-          </ButtonSecondary>
+          <ButtonSecondary onClick={openModalAmenities}>View more 20 amenities</ButtonSecondary>
         </div>
         {renderMotalAmenities()}
       </div>
-    )
-  }
+    );
+  };
 
   const renderMotalAmenities = () => {
     return (
@@ -282,8 +271,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         <Dialog
           as="div"
           className="fixed inset-0 z-50 overflow-y-auto"
-          onClose={closeModalAmenities}
-        >
+          onClose={closeModalAmenities}>
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
               as={Fragment}
@@ -292,16 +280,12 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
               enterTo="opacity-100"
               leave="ease-in duration-200"
               leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
+              leaveTo="opacity-0">
               <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40" />
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
-            <span
-              className="inline-block h-screen align-middle"
-              aria-hidden="true"
-            >
+            <span className="inline-block h-screen align-middle" aria-hidden="true">
               &#8203;
             </span>
             <Transition.Child
@@ -311,15 +295,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
               enterTo="opacity-100 scale-100"
               leave="ease-in duration-200"
               leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
+              leaveTo="opacity-0 scale-95">
               <div className="inline-block py-8 h-screen w-full max-w-4xl">
                 <div className="inline-flex pb-2 flex-col w-full text-left align-middle transition-all transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 dark:border dark:border-neutral-700 dark:text-neutral-100 shadow-xl h-full">
                   <div className="relative flex-shrink-0 px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 text-center">
                     <h3
                       className="text-lg font-medium leading-6 text-gray-900"
-                      id="headlessui-dialog-title-70"
-                    >
+                      id="headlessui-dialog-title-70">
                       Amenities
                     </h3>
                     <span className="absolute left-3 top-3">
@@ -330,11 +312,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
                     {Amenities_demos.filter((_, i) => i < 1212).map((item) => (
                       <div
                         key={item.name}
-                        className="flex items-center py-2.5 sm:py-4 lg:py-5 space-x-5 lg:space-x-8"
-                      >
-                        <i
-                          className={`text-4xl text-neutral-6000 las ${item.icon}`}
-                        ></i>
+                        className="flex items-center py-2.5 sm:py-4 lg:py-5 space-x-5 lg:space-x-8">
+                        <i className={`text-4xl text-neutral-6000 las ${item.icon}`}></i>
                         <span>{item.name}</span>
                       </div>
                     ))}
@@ -345,8 +324,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           </div>
         </Dialog>
       </Transition>
-    )
-  }
+    );
+  };
 
   // const renderSection4 = () => {
   //   return (
@@ -424,8 +403,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           </div>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   const renderSection5 = (e: tourType) => {
     return (
@@ -471,8 +450,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
+              stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -488,8 +466,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
+              stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -505,8 +482,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
+              stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -525,8 +501,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           <ButtonSecondary href="##">See host profile</ButtonSecondary>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   const renderSection6 = () => {
     return (
@@ -547,8 +523,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
             />
             <ButtonCircle
               className="absolute right-2 top-1/2 transform -translate-y-1/2"
-              size=" w-12 h-12 "
-            >
+              size=" w-12 h-12 ">
               <ArrowRightIcon className="w-5 h-5" />
             </ButtonCircle>
           </div>
@@ -565,8 +540,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           </div>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   // const renderSection7 = (e: tourType) => {
   //   return (
@@ -614,11 +589,10 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         <div>
           <h4 className="text-lg font-semibold">Cancellation policy</h4>
           <span className="block mt-3 text-neutral-500 dark:text-neutral-400">
-            Refund 50% of the booking value when customers cancel the room
-            within 48 hours after successful booking and 14 days before the
-            check-in time. <br />
-            Then, cancel the room 14 days before the check-in time, get a 50%
-            refund of the total amount paid (minus the service fee).
+            Refund 50% of the booking value when customers cancel the room within 48 hours after
+            successful booking and 14 days before the check-in time. <br />
+            Then, cancel the room 14 days before the check-in time, get a 50% refund of the total
+            amount paid (minus the service fee).
           </span>
         </div>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
@@ -645,17 +619,16 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
           <div className="prose sm:prose">
             <ul className="mt-3 text-neutral-500 dark:text-neutral-400 space-y-2">
               <li>
-                Ban and I will work together to keep the landscape and
-                environment green and clean by not littering, not using
-                stimulants and respecting people around.
+                Ban and I will work together to keep the landscape and environment green and clean
+                by not littering, not using stimulants and respecting people around.
               </li>
               <li>Do not sing karaoke past 11:30</li>
             </ul>
           </div>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   const renderSidebar = (e: tourType) => {
     return (
@@ -719,22 +692,20 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         {/* SUBMIT */}
         <ButtonPrimary href={`/checkout/${e.id}`}>Reserve</ButtonPrimary>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div
       className={`ListingDetailPage nc-ListingStayDetailPage ${className}`}
-      data-nc-id="ListingStayDetailPage"
-    >
+      data-nc-id="ListingStayDetailPage">
       {/* SINGLE HEADER */}
       <>
         <header className="container 2xl:px-14 rounded-md sm:rounded-xl">
           <div className="relative grid grid-cols-3 sm:grid-cols-4 gap-1 sm:gap-2">
             <div
               className="col-span-2 row-span-3 sm:row-span-2 relative rounded-md sm:rounded-xl overflow-hidden cursor-pointer"
-              onClick={() => handleOpenModal(0)}
-            >
+              onClick={() => handleOpenModal(0)}>
               {tour ? (
                 <NcImage
                   containerClassName="absolute inset-0"
@@ -747,38 +718,38 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
 
               <div className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-100 transition-opacity"></div>
             </div>
-            {tour?.tourDetails[0].destination.destinationImages.map((x) => x.image.toString()).filter((_, i) => i >= 1 && i < 5).map((item, index) => (
-              <div
-                key={index}
-                className={`relative rounded-md sm:rounded-xl overflow-hidden ${
-                  index >= 3 ? 'hidden sm:block' : ''
-                }`}
-              >
-                <NcImage
-                  containerClassName="aspect-w-4 aspect-h-3 sm:aspect-w-6 sm:aspect-h-5"
-                  className="object-cover w-full h-full rounded-md sm:rounded-xl "
-                  src={item || ''}
-                />
-
-                {/* OVERLAY */}
+            {tour?.tourDetails[0].destination.destinationImages
+              .map((x) => x.image.toString())
+              .filter((_, i) => i >= 1 && i < 5)
+              .map((item, index) => (
                 <div
-                  className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
-                  onClick={() => handleOpenModal(index + 1)}
-                />
-              </div>
-            ))}
+                  key={index}
+                  className={`relative rounded-md sm:rounded-xl overflow-hidden ${
+                    index >= 3 ? 'hidden sm:block' : ''
+                  }`}>
+                  <NcImage
+                    containerClassName="aspect-w-4 aspect-h-3 sm:aspect-w-6 sm:aspect-h-5"
+                    className="object-cover w-full h-full rounded-md sm:rounded-xl "
+                    src={item || ''}
+                  />
+
+                  {/* OVERLAY */}
+                  <div
+                    className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
+                    onClick={() => handleOpenModal(index + 1)}
+                  />
+                </div>
+              ))}
 
             <div
               className="absolute hidden md:flex md:items-center md:justify-center left-3 bottom-3 px-4 py-2 rounded-xl bg-neutral-100 text-neutral-500 cursor-pointer hover:bg-neutral-200 z-10"
-              onClick={() => handleOpenModal(0)}
-            >
+              onClick={() => handleOpenModal(0)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+                stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -786,15 +757,15 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
                   d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
                 />
               </svg>
-              <span className="ml-2 text-neutral-800 text-sm font-medium">
-                Show all photos
-              </span>
+              <span className="ml-2 text-neutral-800 text-sm font-medium">Show all photos</span>
             </div>
           </div>
         </header>
         {/* MODAL PHOTOS */}
         <ModalPhotos
-          imgs={tour?.tourDetails[0].destination.destinationImages.map((x) => x.image.toString()) || []}
+          imgs={
+            tour?.tourDetails[0].destination.destinationImages.map((x) => x.image.toString()) || []
+          }
           isOpen={isOpen}
           onClose={handleCloseModal}
           initFocus={openFocusIndex}
@@ -847,7 +818,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ListingStayDetailPage
+export default ListingStayDetailPage;

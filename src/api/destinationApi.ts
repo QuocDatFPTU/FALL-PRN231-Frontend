@@ -1,5 +1,5 @@
-import axiosClient from "./axiosClient";
-
+import axiosClient from './axiosClient';
+import { QueryStringWText, QueryString } from '../type/api';
 export type destinationsType = {
   id: Number;
   name: String;
@@ -9,6 +9,14 @@ export type destinationsType = {
   destinationImages: destinationImagesType[];
 };
 
+export type destinationsTypeNew = {
+  id: Number;
+  name: string;
+  noOfHotels: string;
+  href: string;
+  imageUrl: string;
+};
+
 export type destinationImagesType = {
   id: Number;
   destinationId: Number;
@@ -16,8 +24,17 @@ export type destinationImagesType = {
 };
 
 const destinationApi = {
-  getAll(params?: any) {
-    const url = "/cities/unified-suggest-result";
+  getAll(params?: QueryStringWText) {
+    const url = '/cities/unified-suggest-result';
+    return axiosClient.get(url, { params });
+  },
+
+  getTopDestinations(params?: QueryString) {
+    const url = '/cities/top-destinations';
+    return axiosClient.get(url, { params });
+  },
+  getRecommendDestinations(id?: number, params?: QueryString) {
+    const url = `/cities/${id}/place-recommendations`;
     return axiosClient.get(url, { params });
   },
 
@@ -27,19 +44,19 @@ const destinationApi = {
   },
 
   create(data: destinationsType) {
-    const url = "/cities/unified-suggest-result";
+    const url = '/cities/unified-suggest-result';
     return axiosClient.post(url, data);
   },
 
   update(data: destinationsType) {
-    const url = "/cities/unified-suggest-result";
+    const url = '/cities/unified-suggest-result';
     return axiosClient.put(url, data);
   },
 
   delete(id: Number) {
     const url = `/cities/unified-suggest-result/${id}`;
     return axiosClient.delete(url);
-  },
+  }
 };
 
 export default destinationApi;

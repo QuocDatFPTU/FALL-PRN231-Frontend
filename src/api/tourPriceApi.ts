@@ -1,5 +1,5 @@
-import axiosClient from "./axiosClient";
-import { tourType } from "api/tourApi";
+import axiosClient from './axiosClient';
+import { tourType } from 'api/hotelApi';
 
 export type tourPriceType = {
   id: Number;
@@ -22,7 +22,7 @@ export type tourPriceType = {
 
 const tourPriceApi = {
   getAll(params?: any) {
-    const url = "/TourPrices";
+    const url = '/TourPrices';
     return axiosClient.get(url, { params });
   },
 
@@ -42,19 +42,19 @@ const tourPriceApi = {
   // },
 
   create(data: tourPriceType) {
-    const url = "/TourPrices";
+    const url = '/TourPrices';
     return axiosClient.post(url, data);
   },
 
   update(data: tourPriceType) {
-    const url = "/TourPrices";
+    const url = '/TourPrices';
     return axiosClient.put(url, data);
   },
 
   delete(id: Number) {
     const url = `/TourPrices/${id}`;
     return axiosClient.delete(url);
-  },
+  }
 };
 
 export default tourPriceApi;
